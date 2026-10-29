@@ -1,223 +1,22 @@
-<div align="center">
+# 🚀 RAG-Anything（技术文档分支）
 
-<div style="margin: 20px 0;">
-  <img src="./assets/logo.png" width="120" height="120" alt="RAG-Anything Logo" style="border-radius: 20px; box-shadow: 0 8px 32px rgba(0, 217, 255, 0.3);">
-</div>
+**为 Outlook 邮件和大型技术文档（数千页 PDF、图纸、多列表格）建立索引，使用本地模型、PostgreSQL 存储，并提供带来源引用的搜索界面。**
 
-# 🚀 RAG-Anything: All-in-One RAG System
+*[RAG-Anything](https://github.com/HKUDS/RAG-Anything) 的修改版分支 — Copyright (c) 2025 Data Intelligence Lab@HKU，MIT 许可证。与原作者无隶属关系，也未获其认可。*
 
-> **本仓库是 [HKUDS/RAG-Anything](https://github.com/HKUDS/RAG-Anything) 的修改版分支**（香港大学数据智能实验室 Data Intelligence Lab@HKU，MIT 许可证）。框架、设计及相关研究的全部功劳归原作者所有；本分支与原作者无隶属关系，也未获其认可。详见下方「分支声明与署名」及英文版 [README.md](README.md) 中的 “What this fork adds”。
+<p>
+  <a href="https://github.com/HKUDS/RAG-Anything"><img src="https://img.shields.io/badge/based%20on-HKUDS%2FRAG--Anything-4ecdc4?style=for-the-badge&logo=github&logoColor=white&labelColor=1a1a2e"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge&labelColor=1a1a2e"></a>
+  <a href="README.md"><img src="https://img.shields.io/badge/🇺🇸English-1a1a2e?style=for-the-badge"></a>
+</p>
 
-<div align="center">
-  <div style="width: 100%; height: 2px; margin: 20px 0; background: linear-gradient(90deg, transparent, #00d9ff, transparent);"></div>
-</div>
-
-<div align="center">
-  <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; text-align: center;">
-    <p>
-      <a href='https://github.com/HKUDS/RAG-Anything'><img src='https://img.shields.io/badge/🔥项目-主页-00d9ff?style=for-the-badge&logo=github&logoColor=white&labelColor=1a1a2e'></a>
-      <a href='https://arxiv.org/abs/2510.12323'><img src='https://img.shields.io/badge/📄arXiv-2510.12323-ff6b6b?style=for-the-badge&logo=arxiv&logoColor=white&labelColor=1a1a2e'></a>
-      <a href='https://github.com/HKUDS/LightRAG'><img src='https://img.shields.io/badge/⚡基于-LightRAG-4ecdc4?style=for-the-badge&logo=lightning&logoColor=white&labelColor=1a1a2e'></a>
-    </p>
-    <p>
-      <a href="https://github.com/HKUDS/RAG-Anything/stargazers"><img src='https://img.shields.io/github/stars/HKUDS/RAG-Anything?color=00d9ff&style=for-the-badge&logo=star&logoColor=white&labelColor=1a1a2e' /></a>
-      <img src="https://img.shields.io/badge/🐍Python-3.10-4ecdc4?style=for-the-badge&logo=python&logoColor=white&labelColor=1a1a2e">
-      <a href="https://pypi.org/project/raganything/"><img src="https://img.shields.io/pypi/v/raganything.svg?style=for-the-badge&logo=pypi&logoColor=white&labelColor=1a1a2e&color=ff6b6b"></a>
-    </p>
-    <p>
-      <a href="https://discord.gg/yF2MmDJyGJ"><img src="https://img.shields.io/badge/💬Discord-社区-7289da?style=for-the-badge&logo=discord&logoColor=white&labelColor=1a1a2e"></a>
-      <a href="https://github.com/HKUDS/RAG-Anything/issues/7"><img src="https://img.shields.io/badge/💬微信群-交流-07c160?style=for-the-badge&logo=wechat&logoColor=white&labelColor=1a1a2e"></a>
-    </p>
-    <p>
-      <a href="README_zh.md"><img src="https://img.shields.io/badge/🇨🇳中文版-1a1a2e?style=for-the-badge"></a>
-      <a href="README.md"><img src="https://img.shields.io/badge/🇺🇸English-1a1a2e?style=for-the-badge"></a>
-    </p>
-  </div>
-</div>
-
-</div>
-
-<div align="center" style="margin: 30px 0;">
-  <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="800">
-</div>
-
-<div align="center">
-  <a href="#-快速开始" style="text-decoration: none;">
-    <img src="https://img.shields.io/badge/快速开始-立即开始使用-00d9ff?style=for-the-badge&logo=rocket&logoColor=white&labelColor=1a1a2e">
-  </a>
-</div>
+本分支新增的功能见英文版 [README.md](README.md) 中的 “What this fork adds”，详细文档见 [docs/technical_docs.md](docs/technical_docs.md)；原项目的完整说明见其 [README](https://github.com/HKUDS/RAG-Anything#readme)。
 
 ---
 
-## 🎉 新闻
-- [X] [2026.06]🎯📢 🎉 [LightRAG](https://github.com/HKUDS/LightRAG) 通过原生集成 RAG-Anything 实现多模态 RAG。
-- [X] [2025.10]🎯📢 🚀 我们已发布 [RAG-Anything] 的技术报告（[http://arxiv.org/abs/2510.12323](http://arxiv.org/abs/2510.12323)），立即访问以了解我们的最新研究成果。
-- [X] [2025.08.12]🎯📢 🔍 RAGAnything 现在支持 **VLM增强查询** 模式！当文档包含图片时，系统可以自动将图片与文本上下文一起直接传递给VLM进行综合多模态分析。
-- [X] [2025.07.05]🎯📢 RAGAnything 新增[上下文配置模块](docs/context_aware_processing.md)，支持为多模态内容处理添加相关上下文信息。
-- [X] [2025.07.04]🎯📢 RAGAnything 现在支持多模态内容查询，实现了集成文本、图像、表格和公式处理的增强检索生成功能。
-- [X] [2025.07.03]🎯📢 RAGAnything 在GitHub上达到了1K星标🌟！感谢您的支持和贡献。
+## 🌟 概述
 
----
-
-## 🌟 系统概述
-
-*下一代多模态智能*
-
-<div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); border-radius: 15px; padding: 25px; margin: 20px 0; border: 2px solid #00d9ff; box-shadow: 0 0 30px rgba(0, 217, 255, 0.3);">
-
-**RAG-Anything**是一个综合性多模态文档处理RAG系统。该系统能够无缝处理和查询包含文本、图像、表格、公式等多模态内容的复杂文档，提供完整的检索增强(RAG)生成解决方案。
-
-<img src="assets/rag_anything_framework.png" alt="RAG-Anything" />
-
-</div>
-
-### 🎯 核心特性
-
-<div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border-radius: 15px; padding: 25px; margin: 20px 0;">
-
-- **🔄 端到端多模态处理流水线** - 提供从文档解析到多模态查询响应的完整处理链路，确保系统的一体化运行
-- **📄 多格式文档支持** - 支持PDF、Office文档（DOC/DOCX/PPT/PPTX/XLS/XLSX）、图像等主流文档格式的统一处理和解析
-- **🧠 多模态内容分析引擎** - 针对图像、表格、公式和通用文本内容部署专门的处理器，确保各类内容的精准解析
-- **🔗 基于知识图谱索引** - 实现自动化实体提取和关系构建，建立跨模态的语义连接网络
-- **⚡ 灵活的处理架构** - 支持基于MinerU的智能解析模式和直接多模态内容插入模式，满足不同应用场景需求
-- **📋 直接内容列表插入** - 跳过文档解析，直接插入来自外部源的预解析内容列表，支持多种数据来源整合
-- **🎯 跨模态检索机制** - 实现跨文本和多模态内容的智能检索，提供精准的信息定位和匹配能力
-
-</div>
-
----
-
-## 🏗️ 算法原理与架构
-
-<div style="background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%); border-radius: 15px; padding: 25px; margin: 20px 0; border-left: 5px solid #00d9ff;">
-
-### 核心算法
-
-**RAG-Anything** 采用灵活的分层架构设计，实现多阶段多模态处理流水线，将传统RAG系统扩展为支持异构内容类型的综合处理平台。
-
-</div>
-
-<div align="center">
-  <div style="width: 100%; max-width: 600px; margin: 20px auto; padding: 20px; background: linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(0, 217, 255, 0.05) 100%); border-radius: 15px; border: 1px solid rgba(0, 217, 255, 0.2);">
-    <div style="display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 20px;">
-      <div style="text-align: center;">
-        <div style="font-size: 24px; margin-bottom: 10px;">📄</div>
-        <div style="font-size: 14px; color: #00d9ff;">文档解析</div>
-      </div>
-      <div style="font-size: 20px; color: #00d9ff;">→</div>
-      <div style="text-align: center;">
-        <div style="font-size: 24px; margin-bottom: 10px;">🧠</div>
-        <div style="font-size: 14px; color: #00d9ff;">内容分析</div>
-      </div>
-      <div style="font-size: 20px; color: #00d9ff;">→</div>
-      <div style="text-align: center;">
-        <div style="font-size: 24px; margin-bottom: 10px;">🔍</div>
-        <div style="font-size: 14px; color: #00d9ff;">知识图谱</div>
-      </div>
-      <div style="font-size: 20px; color: #00d9ff;">→</div>
-      <div style="text-align: center;">
-        <div style="font-size: 24px; margin-bottom: 10px;">🎯</div>
-        <div style="font-size: 14px; color: #00d9ff;">智能检索</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-### 1. 文档解析阶段
-
-<div style="background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%); border-radius: 10px; padding: 20px; margin: 15px 0; border-left: 4px solid #4ecdc4;">
-
-该系统构建了高精度文档解析平台，通过结构化提取引擎实现多模态元素的完整识别与提取。系统采用自适应内容分解机制，智能分离文档中的文本、图像、表格、公式等异构内容，并保持其语义关联性。同时支持PDF、Office文档、图像等主流格式的统一处理，提供标准化的多模态内容输出。
-
-**核心组件：**
-
-- **⚙️ 结构化提取引擎**：集成 [MinerU](https://github.com/opendatalab/MinerU) 文档解析框架，实现精确的文档结构识别与内容提取，确保多模态元素的完整性和准确性。
-
-- **🧩 自适应内容分解机制**：建立智能内容分离系统，自动识别并提取文档中的文本块、图像、表格、公式等异构元素，保持元素间的语义关联关系。
-
-- **📁 多格式兼容处理**：部署专业化解析器矩阵，支持PDF、Office文档系列（DOC/DOCX/PPT/PPTX/XLS/XLSX）、图像等主流格式的统一处理与标准化输出。
-
-</div>
-
-### 2. 多模态内容理解与处理
-
-<div style="background: linear-gradient(90deg, #16213e 0%, #0f3460 100%); border-radius: 10px; padding: 20px; margin: 15px 0; border-left: 4px solid #ff6b6b;">
-
-该多模态内容处理系统通过自主分类路由机制实现异构内容的智能识别与优化分发。系统采用并发多流水线架构，确保文本和多模态内容的高效并行处理，在最大化吞吐量的同时保持内容完整性，并能完整提取和保持原始文档的层次结构与元素关联关系。
-
-**核心组件：**
-
-- **🎯 自主内容分类与路由**：自动识别、分类并将不同内容类型路由至优化的执行通道。
-
-- **⚡ 并发多流水线架构**：通过专用处理流水线实现文本和多模态内容的并发执行。这种方法在保持内容完整性的同时最大化吞吐效率。
-
-- **🏗️ 文档层次结构提取**：在内容转换过程中提取并保持原始文档的层次结构和元素间关系。
-
-</div>
-
-### 3. 多模态分析引擎
-
-<div style="background: linear-gradient(90deg, #0f3460 0%, #1a1a2e 100%); border-radius: 10px; padding: 20px; margin: 15px 0; border-left: 4px solid #00d9ff;">
-
-系统部署了面向异构数据模态的模态感知处理单元：
-
-**专用分析器：**
-
-- **🔍 视觉内容分析器**：
-  - 集成视觉模型进行图像分析和内容识别
-  - 基于视觉语义生成上下文感知的描述性标题
-  - 提取视觉元素间的空间关系和层次结构
-
-- **📊 结构化数据解释器**：
-  - 对表格和结构化数据格式进行系统性解释
-  - 实现数据趋势分析的统计模式识别算法
-  - 识别多个表格数据集间的语义关系和依赖性
-
-- **📐 数学表达式解析器**：
-  - 高精度解析复杂数学表达式和公式
-  - 提供原生LaTeX格式支持以实现与学术工作流的无缝集成
-  - 建立数学方程与领域特定知识库间的概念映射
-
-- **🔧 可扩展模态处理器**：
-  - 为自定义和新兴内容类型提供可配置的处理框架
-  - 通过插件架构实现新模态处理器的动态集成
-  - 支持专用场景下处理流水线的运行时配置
-
-</div>
-
-### 4. 多模态知识图谱索引
-
-<div style="background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%); border-radius: 10px; padding: 20px; margin: 15px 0; border-left: 4px solid #4ecdc4;">
-
-多模态知识图谱构建模块将文档内容转换为结构化语义表示。系统提取多模态实体，建立跨模态关系，并保持层次化组织结构。通过加权相关性评分实现优化的知识检索。
-
-**核心功能：**
-
-- **🔍 多模态实体提取**：将重要的多模态元素转换为结构化知识图谱实体。该过程包括语义标注和元数据保存。
-
-- **🔗 跨模态关系映射**：在文本实体和多模态组件之间建立语义连接和依赖关系。通过自动化关系推理算法实现这一功能。
-
-- **🏗️ 层次结构保持**：通过"归属于"关系链维护原始文档组织结构。这些关系链保持逻辑内容层次和章节依赖关系。
-
-- **⚖️ 加权关系评分**：为关系类型分配定量相关性分数。评分基于语义邻近性和文档结构内的上下文重要性。
-
-</div>
-
-### 5. 模态感知检索
-
-<div style="background: linear-gradient(90deg, #16213e 0%, #0f3460 100%); border-radius: 10px; padding: 20px; margin: 15px 0; border-left: 4px solid #ff6b6b;">
-
-混合检索系统结合向量相似性搜索与图遍历算法，实现全面的内容检索。系统实现模态感知排序机制，并维护检索元素间的关系一致性，确保上下文集成的信息传递。
-
-**检索机制：**
-
-- **🔀 向量-图谱融合**：集成向量相似性搜索与图遍历算法。该方法同时利用语义嵌入和结构关系实现全面的内容检索。
-
-- **📊 模态感知排序**：实现基于内容类型相关性的自适应评分机制。系统根据查询特定的模态偏好调整排序结果。
-
-- **🔗 关系一致性维护**：维护检索元素间的语义和结构关系。确保信息传递的连贯性和上下文完整性。
-
-</div>
+本项目把邮件和技术文档变成可搜索的知识库，用自然语言回答问题，并**标明每条结论的出处**。它基于香港大学数据智能实验室发布的多模态 RAG 框架（解析、图像/表格/公式分析、知识图谱、混合检索，构建于 [LightRAG](https://github.com/HKUDS/LightRAG) 之上）；框架的设计与相关研究归原作者所有，详见其 [README](https://github.com/HKUDS/RAG-Anything#readme) 与[论文](https://arxiv.org/abs/2510.12323)。
 
 ---
 
@@ -230,6 +29,9 @@
 </div>
 
 ### 安装
+
+> **分支安装：** 本分支的新增功能（`.msg`、分段 PDF、图纸、PostgreSQL、导出、Web/CLI）**不在** PyPI 包 `raganything` 中（那是原项目）。请从本仓库源码安装：`pip install -e ".[all]"`。以下章节沿用原文档，仍然适用。
+
 
 > **Python 版本：** RAG-Anything 支持 Python 3.10 及以上版本，但默认的 MinerU 解析器依赖 MinerU 3.x，而 MinerU 3.x 仅支持 Python 3.10 至 3.13。在 Python 3.14 上安装 RAG-Anything 时不会安装 MinerU：请改用 Docling 解析器（`pip install docling`，然后设置 `RAGAnythingConfig(parser="docling")`），或使用 Python 3.13 创建环境以使用 MinerU。
 
@@ -1231,23 +1033,7 @@ MinerU 将 v2 标记为持续演进的输出 schema。RAG-Anything 会记录并�
 
 ## 📖 引用
 
-*学术参考*
-
-<div align="center">
-  <div style="width: 60px; height: 60px; margin: 20px auto; position: relative;">
-    <div style="width: 100%; height: 100%; border: 2px solid #00d9ff; border-radius: 50%; position: relative;">
-      <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 24px; color: #00d9ff;">📖</div>
-    </div>
-    <div style="position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); width: 20px; height: 20px; background: white; border-right: 2px solid #00d9ff; border-bottom: 2px solid #00d9ff; transform: rotate(45deg);"></div>
-  </div>
-</div>
-
-## 📜 分支声明与署名
-
-- **原作品：** [RAG-Anything](https://github.com/HKUDS/RAG-Anything)，Copyright (c) 2025 Data Intelligence Lab@HKU，MIT 许可证。上游的许可证与版权声明在 [LICENSE](LICENSE) 中保持不变，任何副本或主要部分都必须随附；另见 [NOTICE](NOTICE)。
-- **修改内容：** 本分支新增了 Outlook `.msg` 导入、超大 PDF 分段解析、技术图纸处理、可容错的向量化、PostgreSQL 存储、导出/导入以及 Web/命令行界面，同样以 MIT 许可证提供。
-- **未获认可：** 原作者未审阅或认可这些修改，也不对其负责。与本分支相关的问题请在此提交，除非能在未修改的上游代码上复现。
-- **引用：** 如在研究中使用 RAG-Anything，请引用下方的原论文，而非本分支。
+本分支没有独立论文。其所基于的框架见原论文；如在研究中使用，请引用该论文：
 
 ```bibtex
 @misc{guo2025raganythingallinoneragframework,
@@ -1263,104 +1049,29 @@ MinerU 将 v2 标记为持续演进的输出 schema。RAG-Anything 会记录并�
 
 ---
 
-## 🔗 相关项目
+## 📜 分支声明与署名
 
-*生态系统与扩展*
-
-<div align="center">
-  <table>
-    <tr>
-      <td align="center">
-        <a href="https://github.com/HKUDS/LightRAG">
-          <div style="width: 100px; height: 100px; background: linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(0, 217, 255, 0.05) 100%); border-radius: 15px; border: 1px solid rgba(0, 217, 255, 0.2); display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
-            <span style="font-size: 32px;">⚡</span>
-          </div>
-          <b>LightRAG</b><br>
-          <sub>简单快速的RAG系统</sub>
-        </a>
-      </td>
-      <td align="center">
-        <a href="https://github.com/HKUDS/VideoRAG">
-          <div style="width: 100px; height: 100px; background: linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(0, 217, 255, 0.05) 100%); border-radius: 15px; border: 1px solid rgba(0, 217, 255, 0.2); display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
-            <span style="font-size: 32px;">🎥</span>
-          </div>
-          <b>VideoRAG</b><br>
-          <sub>超长上下文视频RAG系统</sub>
-        </a>
-      </td>
-      <td align="center">
-        <a href="https://github.com/HKUDS/MiniRAG">
-          <div style="width: 100px; height: 100px; background: linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(0, 217, 255, 0.05) 100%); border-radius: 15px; border: 1px solid rgba(0, 217, 255, 0.2); display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
-            <span style="font-size: 32px;">✨</span>
-          </div>
-          <b>MiniRAG</b><br>
-          <sub>极简RAG系统</sub>
-        </a>
-      </td>
-    </tr>
-  </table>
-</div>
+- **原作品：** [RAG-Anything](https://github.com/HKUDS/RAG-Anything)，Copyright (c) 2025 Data Intelligence Lab@HKU，MIT 许可证。上游的许可证与版权声明在 [LICENSE](LICENSE) 中保持不变，任何副本或主要部分都必须随附；另见 [NOTICE](NOTICE)。
+- **修改内容：** 本分支新增了 Outlook `.msg` 导入、超大 PDF 分段解析、技术图纸处理、可容错的向量化、PostgreSQL 存储、导出/导入以及 Web/命令行界面，同样以 MIT 许可证提供。
+- **未获认可：** 原作者未审阅或认可这些修改，也不对其负责。与本分支相关的问题请在此提交，除非能在未修改的上游代码上复现。
+- **引用：** 如在研究中使用 RAG-Anything，请引用上方「引用」一节中的原论文，而非本分支。
 
 ---
 
-## 🤝 贡献者
+## 🔗 原项目与生态
 
-*加入创新*
-
-<div align="center">
-  感谢所有贡献者！
-</div>
-
-<div align="center">
-  <a href="https://github.com/HKUDS/RAG-Anything/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=HKUDS/RAG-Anything" style="border-radius: 15px; box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);" />
-  </a>
-</div>
+- [HKUDS/RAG-Anything](https://github.com/HKUDS/RAG-Anything) — 原框架（Data Intelligence Lab@HKU），贡献者名单见 [GitHub](https://github.com/HKUDS/RAG-Anything/graphs/contributors)，感谢所有参与者。
+- [LightRAG](https://github.com/HKUDS/LightRAG) — 底层检索引擎。
 
 ---
 
-<div align="center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 30px; margin: 30px 0;">
-  <div>
-    <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="500">
-  </div>
-  <div style="margin-top: 20px;">
-    <a href="https://github.com/HKUDS/RAG-Anything" style="text-decoration: none;">
-      <img src="https://img.shields.io/badge/⭐%20在GitHub上为我们点星-1a1a2e?style=for-the-badge&logo=github&logoColor=white">
-    </a>
-    <a href="https://github.com/HKUDS/RAG-Anything/issues" style="text-decoration: none;">
-      <img src="https://img.shields.io/badge/🐛%20报告问题-ff6b6b?style=for-the-badge&logo=github&logoColor=white">
-    </a>
-    <a href="https://github.com/HKUDS/RAG-Anything/discussions" style="text-decoration: none;">
-      <img src="https://img.shields.io/badge/💬%20讨论交流-4ecdc4?style=for-the-badge&logo=github&logoColor=white">
-    </a>
-  </div>
-</div>
+## 🤝 参与与支持
+
+**本分支**的问题与合并请求请提交到 [Willtahiti/RAG-Anything](https://github.com/Willtahiti/RAG-Anything)；若问题在未修改的原代码上同样出现，请报告给[原项目](https://github.com/HKUDS/RAG-Anything/issues)。
 
 <div align="center">
-  <div style="width: 100%; max-width: 600px; margin: 20px auto; padding: 20px; background: linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(0, 217, 255, 0.05) 100%); border-radius: 15px; border: 1px solid rgba(0, 217, 255, 0.2);">
-    <div style="display: flex; justify-content: center; align-items: center; gap: 15px;">
-      <span style="font-size: 24px;">⭐</span>
-      <span style="color: #00d9ff; font-size: 18px;">感谢您访问RAG-Anything!</span>
-      <span style="font-size: 24px;">⭐</span>
-    </div>
-    <div style="margin-top: 10px; color: #00d9ff; font-size: 16px;">构建多模态AI的未来</div>
-  </div>
+
+**RAG-Anything（技术文档分支）** — 基于 Data Intelligence Lab@HKU 的工作 · MIT 许可证
+
 </div>
 
-<div align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&size=20&duration=3000&pause=1000&color=00D9FF&center=true&vCenter=true&width=600&lines=感谢您访问RAG-Anything!;构建多模态AI的未来;如果觉得有用请点星⭐!" alt="Closing Animation" />
-</div>
-
-<style>
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
-@keyframes glow {
-  0% { box-shadow: 0 0 5px rgba(0, 217, 255, 0.5); }
-  50% { box-shadow: 0 0 20px rgba(0, 217, 255, 0.8); }
-  100% { box-shadow: 0 0 5px rgba(0, 217, 255, 0.5); }
-}
-</style>

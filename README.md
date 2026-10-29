@@ -1,67 +1,30 @@
-<div align="center">
+# 🚀 RAG-Anything (fork technique)
 
-<div style="margin: 20px 0;">
-  <img src="./assets/logo.png" width="120" height="120" alt="RAG-Anything Logo" style="border-radius: 20px; box-shadow: 0 8px 32px rgba(0, 217, 255, 0.3);">
-</div>
+**Index Outlook mails and large technical documentation (PDFs of several thousand pages, plans, multi-column tables) with local models, PostgreSQL storage and a search interface that cites its sources.**
 
-# 🚀 RAG-Anything: All-in-One RAG Framework
+*Technical-documentation fork of [RAG-Anything](https://github.com/HKUDS/RAG-Anything) — Copyright (c) 2025 Data Intelligence Lab@HKU, MIT License. Not affiliated with or endorsed by the original authors.*
 
-> **This is a modified fork of [HKUDS/RAG-Anything](https://github.com/HKUDS/RAG-Anything)** by the Data Intelligence Lab@HKU, released under the MIT License. All credit for the framework, its design and the underlying research belongs to the original authors. This fork is not affiliated with or endorsed by them. See [Fork notice](#-fork-notice-and-attribution) and [What this fork adds](#-what-this-fork-adds).
+<p>
+  <a href="https://github.com/HKUDS/RAG-Anything"><img src="https://img.shields.io/badge/based%20on-HKUDS%2FRAG--Anything-4ecdc4?style=for-the-badge&logo=github&logoColor=white&labelColor=1a1a2e"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge&labelColor=1a1a2e"></a>
+  <img src="https://img.shields.io/badge/python-3.10--3.13-4ecdc4?style=for-the-badge&logo=python&logoColor=white&labelColor=1a1a2e">
+</p>
 
-<a href="https://trendshift.io/repositories/14959" target="_blank"><img src="https://trendshift.io/api/badge/repositories/14959" alt="HKUDS%2FRAG-Anything | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
-
-<div align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&size=24&duration=3000&pause=1000&color=00D9FF&center=true&vCenter=true&width=600&lines=Welcome+to+RAG-Anything;Next-Gen+Multimodal+RAG+System;Powered+by+Advanced+AI+Technology" alt="Typing Animation" />
-</div>
-
-<div align="center">
-  <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; text-align: center;">
-    <p>
-      <a href='https://github.com/HKUDS/RAG-Anything'><img src='https://img.shields.io/badge/🔥Project-Page-00d9ff?style=for-the-badge&logo=github&logoColor=white&labelColor=1a1a2e'></a>
-      <a href='https://arxiv.org/abs/2510.12323'><img src='https://img.shields.io/badge/📄arXiv-2510.12323-ff6b6b?style=for-the-badge&logo=arxiv&logoColor=white&labelColor=1a1a2e'></a>
-      <a href='https://github.com/HKUDS/LightRAG'><img src='https://img.shields.io/badge/⚡Based%20on-LightRAG-4ecdc4?style=for-the-badge&logo=lightning&logoColor=white&labelColor=1a1a2e'></a>
-    </p>
-    <p>
-      <a href="https://github.com/HKUDS/RAG-Anything/stargazers"><img src='https://img.shields.io/github/stars/HKUDS/RAG-Anything?color=00d9ff&style=for-the-badge&logo=star&logoColor=white&labelColor=1a1a2e' /></a>
-      <img src="https://img.shields.io/badge/🐍Python-3.10-4ecdc4?style=for-the-badge&logo=python&logoColor=white&labelColor=1a1a2e">
-      <a href="https://pypi.org/project/raganything/"><img src="https://img.shields.io/pypi/v/raganything.svg?style=for-the-badge&logo=pypi&logoColor=white&labelColor=1a1a2e&color=ff6b6b"></a>
-      <a href="https://github.com/astral-sh/uv"><img src="https://img.shields.io/badge/⚡uv-Ready-ff6b6b?style=for-the-badge&logo=python&logoColor=white&labelColor=1a1a2e"></a>
-    </p>
-    <p>
-      <a href="https://discord.gg/yF2MmDJyGJ"><img src="https://img.shields.io/badge/💬Discord-Community-7289da?style=for-the-badge&logo=discord&logoColor=white&labelColor=1a1a2e"></a>
-      <a href="https://github.com/HKUDS/RAG-Anything/issues/7"><img src="https://img.shields.io/badge/💬WeChat-Group-07c160?style=for-the-badge&logo=wechat&logoColor=white&labelColor=1a1a2e"></a>
-    </p>
-    <p>
-      <a href="README_zh.md"><img src="https://img.shields.io/badge/🇨🇳中文版-1a1a2e?style=for-the-badge"></a>
-      <a href="README.md"><img src="https://img.shields.io/badge/🇺🇸English-1a1a2e?style=for-the-badge"></a>
-    </p>
-    <p>
-      <a href="https://pepy.tech/projects/raganything"><img src="https://static.pepy.tech/personalized-badge/raganything?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads"></a>
-    </p>
-  </div>
-</div>
-
-</div>
-
-<div align="center">
-  <div style="width: 100%; height: 2px; margin: 20px 0; background: linear-gradient(90deg, transparent, #00d9ff, transparent);"></div>
-</div>
-
-<div align="center">
-  <a href="#-quick-start" style="text-decoration: none;">
-    <img src="https://img.shields.io/badge/Quick%20Start-Get%20Started%20Now-00d9ff?style=for-the-badge&logo=rocket&logoColor=white&labelColor=1a1a2e">
-  </a>
-</div>
+[Fork notice](#-fork-notice-and-attribution) · [What this fork adds](#-what-this-fork-adds) · [Quick start](#-quick-start) · [Documentation](docs/technical_docs.md) · [Original README](https://github.com/HKUDS/RAG-Anything#readme)
 
 ---
 
-## 🎉 News
+<details>
+<summary>News from the original project</summary>
+
 - [X] [2026.06]🎯📢 🎉 [LightRAG](https://github.com/HKUDS/LightRAG) enables multimodal RAG through native integration of RAG-Anything.
 - [X] [2025.10]🎯📢 🚀 We have released the technical report of [RAG-Anything](http://arxiv.org/abs/2510.12323). Access it now to explore our latest research findings.
 - [X] [2025.08]🎯📢 🔍 RAG-Anything now features **VLM-Enhanced Query** mode! When documents include images, the system seamlessly integrates them into VLM for advanced multimodal analysis, combining visual and textual context for deeper insights.
 - [X] [2025.07]🎯📢 RAG-Anything now features a [context configuration module](docs/context_aware_processing.md), enabling intelligent integration of relevant contextual information to enhance multimodal content processing.
 - [X] [2025.07]🎯📢 🚀 RAG-Anything now supports multimodal query capabilities, enabling enhanced RAG with seamless processing of text, images, tables, and equations.
 - [X] [2025.07]🎯📢 🎉 RAG-Anything has reached 1k🌟 stars on GitHub! Thank you for your incredible support and valuable contributions to the project.
+
+</details>
 
 ---
 
@@ -71,181 +34,36 @@ Changes made on top of the upstream project to index Outlook mails and very larg
 
 | Addition | Summary |
 |---|---|
-| 📧 **Outlook `.msg`** | Headers, body and recursive attachments (PDF, Office, images, nested `.msg`). `pip install "raganything[email]"` |
+| 📧 **Outlook `.msg`** | Headers, body and recursive attachments (PDF, Office, images, nested `.msg`). `pip install -e ".[email]"` |
 | 📚 **Very large PDFs** | Parsed in resumable windows (default 200 pages) with checkpoints, bad-page isolation and cross-page table stitching, for documents of several thousand pages |
 | 📐 **Technical drawings** | Plan pages detected, rendered as overview + overlapping tiles and described by the vision model with a drawing-specific prompt |
 | 🔌 **Resilient embeddings** | Waits out model-server disconnections, validates every vector, resumes interrupted documents |
 | 🗄️ **PostgreSQL + pgvector** | Optional storage backend ([docs/postgres_setup.md](docs/postgres_setup.md), `docker-compose.pg.yml`) |
 | 📦 **Export / import** | Exact snapshots and a portable bundle between file storage and PostgreSQL |
-| 🌐 **Web interface and CLI** | Ingestion page and search page; answers cite their sources (📄 🖼️ 📊 📐 ✉️) with links to the original at the cited page and a hover preview. `pip install "raganything[app]"`, then `python -m raganything.app` or `python -m raganything.cli` |
+| 🌐 **Web interface and CLI** | Ingestion page and search page; answers cite their sources (📄 🖼️ 📊 📐 ✉️) with links to the original at the cited page and a hover preview. `pip install -e ".[app]"`, then `python -m raganything.app` or `python -m raganything.cli` |
 
 New code lives in `raganything/email_parser.py`, `pdf_windowing.py`, `drawing_pages.py`, `resilient_embedding.py`, `resume.py`, `export.py`, `cli.py` and `raganything/app/`. Upstream modules were extended where needed (parsers, processor, configuration, image processor and prompts).
 
 ---
 
-## 🌟 System Overview
+## 🌟 Overview
 
-*Next-Generation Multimodal Intelligence*
+This project turns a collection of mails and technical documents into a searchable knowledge base that answers in natural language and **shows where each statement comes from**.
 
-<div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); border-radius: 15px; padding: 25px; margin: 20px 0; border: 2px solid #00d9ff; box-shadow: 0 0 30px rgba(0, 217, 255, 0.3);">
+It builds on the multimodal RAG framework published by the Data Intelligence Lab@HKU (parsing, image/table/equation analysis, knowledge graph, hybrid retrieval, all on top of [LightRAG](https://github.com/HKUDS/LightRAG)); the framework's design and the underlying research are theirs — see their [README](https://github.com/HKUDS/RAG-Anything#readme) and [paper](https://arxiv.org/abs/2510.12323) for the detailed description.
 
-Modern documents increasingly contain diverse multimodal content—text, images, tables, equations, charts, and multimedia—that traditional text-focused RAG systems cannot effectively process. **RAG-Anything** addresses this challenge as a comprehensive **All-in-One Multimodal Document Processing RAG system** built on [LightRAG](https://github.com/HKUDS/LightRAG).
+### How it works
 
-As a unified solution, RAG-Anything **eliminates the need for multiple specialized tools**. It provides **seamless processing and querying across all content modalities** within a single integrated framework. Unlike conventional RAG approaches that struggle with non-textual elements, our all-in-one system delivers **comprehensive multimodal retrieval capabilities**.
+1. **Ingest** — Outlook `.msg` files (with attachments), PDFs of any length, Office documents and images are parsed. Large PDFs are processed window by window with checkpoints; plan pages are rendered in tiles.
+2. **Understand** — a local vision/text model describes images, plans and tables; entities and relations are extracted into a knowledge graph.
+3. **Index** — text, descriptions and graph go to file storage or PostgreSQL + pgvector. Embeddings favor quality and wait out server disconnections.
+4. **Search** — questions combine vector and graph retrieval; answers cite numbered sources (📄 🖼️ 📊 📐 ✉️) linked to the original page, with a hover preview.
+5. **Move** — knowledge bases can be exported and imported between file storage and PostgreSQL.
 
-Users can query documents containing **interleaved text**, **visual diagrams**, **structured tables**, and **mathematical formulations** through **one cohesive interface**. This consolidated approach makes RAG-Anything particularly valuable for academic research, technical documentation, financial reports, and enterprise knowledge management where rich, mixed-content documents demand a **unified processing framework**.
+### Typical use
 
-<img src="assets/rag_anything_framework.png" alt="RAG-Anything" />
-
-</div>
-
-### 🎯 Key Features
-
-<div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border-radius: 15px; padding: 25px; margin: 20px 0;">
-
-- **🔄 End-to-End Multimodal Pipeline** - Complete workflow from document ingestion and parsing to intelligent multimodal query answering
-- **📄 Universal Document Support** - Seamless processing of PDFs, Office documents, images, and diverse file formats
-- **🧠 Specialized Content Analysis** - Dedicated processors for images, tables, mathematical equations, and heterogeneous content types
-- **🔗 Multimodal Knowledge Graph** - Automatic entity extraction and cross-modal relationship discovery for enhanced understanding
-- **⚡ Adaptive Processing Modes** - Flexible MinerU-based parsing or direct multimodal content injection workflows
-- **📋 Direct Content List Insertion** - Bypass document parsing by directly inserting pre-parsed content lists from external sources
-- **🎯 Hybrid Intelligent Retrieval** - Advanced search capabilities spanning textual and multimodal content with contextual understanding
-
-</div>
-
----
-
-## 🏗️ Algorithm & Architecture
-
-<div style="background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%); border-radius: 15px; padding: 25px; margin: 20px 0; border-left: 5px solid #00d9ff;">
-
-### Core Algorithm
-
-**RAG-Anything** implements an effective **multi-stage multimodal pipeline** that fundamentally extends traditional RAG architectures to seamlessly handle diverse content modalities through intelligent orchestration and cross-modal understanding.
-
-</div>
-
-<div align="center">
-  <div style="width: 100%; max-width: 600px; margin: 20px auto; padding: 20px; background: linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(0, 217, 255, 0.05) 100%); border-radius: 15px; border: 1px solid rgba(0, 217, 255, 0.2);">
-    <div style="display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 20px;">
-      <div style="text-align: center;">
-        <div style="font-size: 24px; margin-bottom: 10px;">📄</div>
-        <div style="font-size: 14px; color: #00d9ff;">Document Parsing</div>
-      </div>
-      <div style="font-size: 20px; color: #00d9ff;">→</div>
-      <div style="text-align: center;">
-        <div style="font-size: 24px; margin-bottom: 10px;">🧠</div>
-        <div style="font-size: 14px; color: #00d9ff;">Content Analysis</div>
-      </div>
-      <div style="font-size: 20px; color: #00d9ff;">→</div>
-      <div style="text-align: center;">
-        <div style="font-size: 24px; margin-bottom: 10px;">🔍</div>
-        <div style="font-size: 14px; color: #00d9ff;">Knowledge Graph</div>
-      </div>
-      <div style="font-size: 20px; color: #00d9ff;">→</div>
-      <div style="text-align: center;">
-        <div style="font-size: 24px; margin-bottom: 10px;">🎯</div>
-        <div style="font-size: 14px; color: #00d9ff;">Intelligent Retrieval</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-### 1. Document Parsing Stage
-
-<div style="background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%); border-radius: 10px; padding: 20px; margin: 15px 0; border-left: 4px solid #4ecdc4;">
-
-The system provides high-fidelity document extraction through adaptive content decomposition. It intelligently segments heterogeneous elements while preserving contextual relationships. Universal format compatibility is achieved via specialized optimized parsers.
-
-**Key Components:**
-
-- **⚙️ MinerU Integration**: Leverages [MinerU](https://github.com/opendatalab/MinerU) for high-fidelity document structure extraction and semantic preservation across complex layouts.
-
-- **🧩 Adaptive Content Decomposition**: Automatically segments documents into coherent text blocks, visual elements, structured tables, mathematical equations, and specialized content types while preserving contextual relationships.
-
-- **📁 Universal Format Support**: Provides comprehensive handling of PDFs, Office documents (DOC/DOCX/PPT/PPTX/XLS/XLSX), images, and emerging formats through specialized parsers with format-specific optimization.
-
-</div>
-
-### 2. Multi-Modal Content Understanding & Processing
-
-<div style="background: linear-gradient(90deg, #16213e 0%, #0f3460 100%); border-radius: 10px; padding: 20px; margin: 15px 0; border-left: 4px solid #ff6b6b;">
-
-The system automatically categorizes and routes content through optimized channels. It uses concurrent pipelines for parallel text and multimodal processing. Document hierarchy and relationships are preserved during transformation.
-
-**Key Components:**
-
-- **🎯 Autonomous Content Categorization and Routing**: Automatically identify, categorize, and route different content types through optimized execution channels.
-
-- **⚡ Concurrent Multi-Pipeline Architecture**: Implements concurrent execution of textual and multimodal content through dedicated processing pipelines. This approach maximizes throughput efficiency while preserving content integrity.
-
-- **🏗️ Document Hierarchy Extraction**: Extracts and preserves original document hierarchy and inter-element relationships during content transformation.
-
-</div>
-
-### 3. Multimodal Analysis Engine
-
-<div style="background: linear-gradient(90deg, #0f3460 0%, #1a1a2e 100%); border-radius: 10px; padding: 20px; margin: 15px 0; border-left: 4px solid #00d9ff;">
-
-The system deploys modality-aware processing units for heterogeneous data modalities:
-
-**Specialized Analyzers:**
-
-- **🔍 Visual Content Analyzer**:
-  - Integrate vision model for image analysis.
-  - Generates context-aware descriptive captions based on visual semantics.
-  - Extracts spatial relationships and hierarchical structures between visual elements.
-
-- **📊 Structured Data Interpreter**:
-  - Performs systematic interpretation of tabular and structured data formats.
-  - Implements statistical pattern recognition algorithms for data trend analysis.
-  - Identifies semantic relationships and dependencies across multiple tabular datasets.
-
-- **📐 Mathematical Expression Parser**:
-  - Parses complex mathematical expressions and formulas with high accuracy.
-  - Provides native LaTeX format support for seamless integration with academic workflows.
-  - Establishes conceptual mappings between mathematical equations and domain-specific knowledge bases.
-
-- **🔧 Extensible Modality Handler**:
-  - Provides configurable processing framework for custom and emerging content types.
-  - Enables dynamic integration of new modality processors through plugin architecture.
-  - Supports runtime configuration of processing pipelines for specialized use cases.
-
-</div>
-
-### 4. Multimodal Knowledge Graph Index
-
-<div style="background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%); border-radius: 10px; padding: 20px; margin: 15px 0; border-left: 4px solid #4ecdc4;">
-
-The multi-modal knowledge graph construction module transforms document content into structured semantic representations. It extracts multimodal entities, establishes cross-modal relationships, and preserves hierarchical organization. The system applies weighted relevance scoring for optimized knowledge retrieval.
-
-**Core Functions:**
-
-- **🔍 Multi-Modal Entity Extraction**: Transforms significant multimodal elements into structured knowledge graph entities. The process includes semantic annotations and metadata preservation.
-
-- **🔗 Cross-Modal Relationship Mapping**: Establishes semantic connections and dependencies between textual entities and multimodal components. This is achieved through automated relationship inference algorithms.
-
-- **🏗️ Hierarchical Structure Preservation**: Maintains original document organization through "belongs_to" relationship chains. These chains preserve logical content hierarchy and sectional dependencies.
-
-- **⚖️ Weighted Relationship Scoring**: Assigns quantitative relevance scores to relationship types. Scoring is based on semantic proximity and contextual significance within the document structure.
-
-</div>
-
-### 5. Modality-Aware Retrieval
-
-<div style="background: linear-gradient(90deg, #16213e 0%, #0f3460 100%); border-radius: 10px; padding: 20px; margin: 15px 0; border-left: 4px solid #ff6b6b;">
-
-The hybrid retrieval system combines vector similarity search with graph traversal algorithms for comprehensive content retrieval. It implements modality-aware ranking mechanisms and maintains relational coherence between retrieved elements to ensure contextually integrated information delivery.
-
-**Retrieval Mechanisms:**
-
-- **🔀 Vector-Graph Fusion**: Integrates vector similarity search with graph traversal algorithms. This approach leverages both semantic embeddings and structural relationships for comprehensive content retrieval.
-
-- **📊 Modality-Aware Ranking**: Implements adaptive scoring mechanisms that weight retrieval results based on content type relevance. The system adjusts rankings according to query-specific modality preferences.
-
-- **🔗 Relational Coherence Maintenance**: Maintains semantic and structural relationships between retrieved elements. This ensures coherent information delivery and contextual integrity.
-
-</div>
+- Technical documentation of a building or an installation (electrical, plumbing, HVAC): manuals, specifications, plans, multi-column tables.
+- Project mail archives (`.msg`) searched together with the documents they refer to.
 
 ---
 
@@ -258,6 +76,9 @@ The hybrid retrieval system combines vector similarity search with graph travers
 </div>
 
 ### Installation
+
+> **Fork install:** the additions of this fork (`.msg`, windowed PDFs, drawings, PostgreSQL, export, web/CLI) are **not** in the PyPI package `raganything`, which is the original project. Install this repository from source (Option 2, using this repository's URL) with `pip install -e ".[all]"`. The sections below are inherited from the original documentation and still apply; the fork's own documentation is in [docs/technical_docs.md](docs/technical_docs.md).
+
 
 > **Python version:** RAG-Anything supports Python 3.10 and later, but its default MinerU parser needs MinerU 3.x, which supports Python 3.10 to 3.13 only. On Python 3.14, RAG-Anything is installed without MinerU: use the Docling parser there (`pip install docling`, then `RAGAnythingConfig(parser="docling")`), or create the environment with Python 3.13 to use MinerU.
 
@@ -1311,26 +1132,7 @@ Different content types require specific optional dependencies:
 
 ## 📖 Citation
 
-*Academic Reference*
-
-<div align="center">
-  <div style="width: 60px; height: 60px; margin: 20px auto; position: relative;">
-    <div style="width: 100%; height: 100%; border: 2px solid #00d9ff; border-radius: 50%; position: relative;">
-      <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 24px; color: #00d9ff;">📖</div>
-    </div>
-    <div style="position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); width: 20px; height: 20px; background: white; border-right: 2px solid #00d9ff; border-bottom: 2px solid #00d9ff; transform: rotate(45deg);"></div>
-  </div>
-</div>
-
-## 📜 Fork notice and attribution
-
-- **Original work:** [RAG-Anything](https://github.com/HKUDS/RAG-Anything), Copyright (c) 2025 Data Intelligence Lab@HKU, MIT License. The upstream license and copyright notice are kept unchanged in [LICENSE](LICENSE) and must stay with every copy or substantial portion of this software; see also [NOTICE](NOTICE).
-- **Modifications:** the additions listed above were made in this fork and are provided under the same MIT License. The full change history is in the git log; the upstream history is preserved.
-- **Not endorsed:** the original authors did not review or endorse these modifications and are not responsible for them. Report issues with this fork here, not upstream, unless you can reproduce them on the unmodified upstream code.
-- **Citing:** if you use RAG-Anything in research, please cite the original paper below, not this fork.
-- Names, logos and project links of the original project (logo, badges, links to HKUDS repositories, Discord and WeChat groups) remain those of the upstream project.
-
-If you find RAG-Anything useful in your research, please cite our paper:
+This fork has no paper. The framework it builds on is described in the original paper; if you use it in research, please cite that paper:
 
 ```bibtex
 @misc{guo2025raganythingallinoneragframework,
@@ -1344,88 +1146,47 @@ If you find RAG-Anything useful in your research, please cite our paper:
 }
 ```
 
----
+If you also want to reference this fork, cite it as a software repository:
 
-## 🔗 Related Projects
-
-*Ecosystem & Extensions*
-
-<div align="center">
-  <table>
-    <tr>
-      <td align="center">
-        <a href="https://github.com/HKUDS/LightRAG">
-          <div style="width: 100px; height: 100px; background: linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(0, 217, 255, 0.05) 100%); border-radius: 15px; border: 1px solid rgba(0, 217, 255, 0.2); display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
-            <span style="font-size: 32px;">⚡</span>
-          </div>
-          <b>LightRAG</b><br>
-          <sub>Simple and Fast RAG</sub>
-        </a>
-      </td>
-      <td align="center">
-        <a href="https://github.com/HKUDS/VideoRAG">
-          <div style="width: 100px; height: 100px; background: linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(0, 217, 255, 0.05) 100%); border-radius: 15px; border: 1px solid rgba(0, 217, 255, 0.2); display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
-            <span style="font-size: 32px;">🎥</span>
-          </div>
-          <b>VideoRAG</b><br>
-          <sub>Extreme Long-Context Video RAG</sub>
-        </a>
-      </td>
-      <td align="center">
-        <a href="https://github.com/HKUDS/MiniRAG">
-          <div style="width: 100px; height: 100px; background: linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(0, 217, 255, 0.05) 100%); border-radius: 15px; border: 1px solid rgba(0, 217, 255, 0.2); display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
-            <span style="font-size: 32px;">✨</span>
-          </div>
-          <b>MiniRAG</b><br>
-          <sub>Extremely Simple RAG</sub>
-        </a>
-      </td>
-    </tr>
-  </table>
-</div>
+```bibtex
+@software{raganything_fork_technique,
+      title={RAG-Anything (fork technique): Outlook mail and large technical PDF indexing},
+      author={{Willtahiti}},
+      url={https://github.com/Willtahiti/RAG-Anything},
+      note={Modified fork of HKUDS/RAG-Anything (MIT License, Copyright (c) 2025 Data Intelligence Lab@HKU)},
+}
+```
 
 ---
 
-## 🤝 Contribution
+## 📜 Fork notice and attribution
 
-*Join the Innovation*
+- **Original work:** [RAG-Anything](https://github.com/HKUDS/RAG-Anything), Copyright (c) 2025 Data Intelligence Lab@HKU, MIT License. The upstream license and copyright notice are kept unchanged in [LICENSE](LICENSE) and must stay with every copy or substantial portion of this software; see also [NOTICE](NOTICE).
+- **Modifications:** the additions listed above were made in this fork and are provided under the same MIT License. The full change history is in the git log; the upstream history is preserved.
+- **Not endorsed:** the original authors did not review or endorse these modifications and are not responsible for them. Report issues with this fork here, not upstream, unless you can reproduce them on the unmodified upstream code.
+- **Citing:** if you use RAG-Anything in research, please cite the original paper (see [Citation](#-citation)).
 
-<div align="center">
-  We thank all our contributors for their valuable contributions.
-</div>
-
-<div align="center">
-  <a href="https://github.com/HKUDS/RAG-Anything/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=HKUDS/RAG-Anything" style="border-radius: 15px; box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);" />
-  </a>
-</div>
+- Names, logos and project links of the original project remain those of the upstream project; this README no longer reuses its logo, badges or community links.
 
 ---
 
-<div align="center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 30px; margin: 30px 0;">
-  <div>
-    <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="500">
-  </div>
-  <div style="margin-top: 20px;">
-    <a href="https://github.com/HKUDS/RAG-Anything" style="text-decoration: none;">
-      <img src="https://img.shields.io/badge/⭐%20Star%20us%20on%20GitHub-1a1a2e?style=for-the-badge&logo=github&logoColor=white">
-    </a>
-    <a href="https://github.com/HKUDS/RAG-Anything/issues" style="text-decoration: none;">
-      <img src="https://img.shields.io/badge/🐛%20Report%20Issues-ff6b6b?style=for-the-badge&logo=github&logoColor=white">
-    </a>
-    <a href="https://github.com/HKUDS/RAG-Anything/discussions" style="text-decoration: none;">
-      <img src="https://img.shields.io/badge/💬%20Discussions-4ecdc4?style=for-the-badge&logo=github&logoColor=white">
-    </a>
-  </div>
-</div>
+## 🔗 Original project and ecosystem
+
+*Upstream credits*
+
+- [HKUDS/RAG-Anything](https://github.com/HKUDS/RAG-Anything) — the original framework (Data Intelligence Lab@HKU); its contributors are listed [on GitHub](https://github.com/HKUDS/RAG-Anything/graphs/contributors). Thank you to everyone who built it.
+- [LightRAG](https://github.com/HKUDS/LightRAG) — the retrieval engine underneath.
+- Parsers used by the pipeline: MinerU, Docling, PaddleOCR.
+
+---
+
+## 🤝 Contributing and support
+
+Issues and pull requests for **this fork** go to [Willtahiti/RAG-Anything](https://github.com/Willtahiti/RAG-Anything). For problems that also occur on the unmodified original code, please report them to the [original project](https://github.com/HKUDS/RAG-Anything/issues).
 
 <div align="center">
-  <div style="width: 100%; max-width: 600px; margin: 20px auto; padding: 20px; background: linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(0, 217, 255, 0.05) 100%); border-radius: 15px; border: 1px solid rgba(0, 217, 255, 0.2);">
-    <div style="display: flex; justify-content: center; align-items: center; gap: 15px;">
-      <span style="font-size: 24px;">⭐</span>
-      <span style="color: #00d9ff; font-size: 18px;">Thank you for visiting RAG-Anything!</span>
-      <span style="font-size: 24px;">⭐</span>
-    </div>
-    <div style="margin-top: 10px; color: #00d9ff; font-size: 16px;">Building the Future of Multimodal AI</div>
-  </div>
+
+**RAG-Anything (fork technique)** — built on the work of the Data Intelligence Lab@HKU · MIT License
+
 </div>
+

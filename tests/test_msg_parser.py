@@ -210,7 +210,7 @@ def test_malicious_name_is_written_inside_attachment_dir(tmp_path, fake_extract_
 
 def test_missing_extract_msg_gives_actionable_error(tmp_path, monkeypatch):
     monkeypatch.setitem(sys.modules, "extract_msg", None)
-    with pytest.raises(ImportError, match="raganything\\[email\\]"):
+    with pytest.raises(ImportError, match="extract-msg"):
         parse_msg(_msg_file(tmp_path), tmp_path / "out")
 
 
