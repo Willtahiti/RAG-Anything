@@ -6,7 +6,7 @@ the headers, one for the body, and the content of every attachment (parsed
 through a caller-supplied handler, so the active document parser is reused).
 Nested ``.msg`` attachments are followed up to ``max_depth`` levels.
 
-``extract-msg`` is imported lazily (``pip install raganything[email]``).
+``extract-msg`` is imported lazily (``pip install extract-msg``).
 The message objects are only used through a handful of attributes, so tests
 can stand in a duck-typed fake.
 """
@@ -323,7 +323,7 @@ def parse_msg(
         import extract_msg
     except ImportError as exc:
         raise ImportError(
-            "Reading .msg files requires extract-msg: pip install 'raganything[email]'"
+            "Reading .msg files requires extract-msg: pip install extract-msg"
         ) from exc
 
     output_dir = Path(output_dir)
