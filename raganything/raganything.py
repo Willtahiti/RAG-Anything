@@ -219,6 +219,24 @@ class RAGAnything(QueryMixin, ProcessorMixin, BatchMixin):
             config=context_config, tokenizer=self.lightrag.tokenizer
         )
 
+    def _create_aux_kv_storage(self, namespace: str):
+        """KV storage for RAGAnything's own namespaces (parse cache, status).
+
+        PostgreSQL's KV backend only knows LightRAG's fixed tables, so these
+        namespaces fall back to JSON files under the working directory there.
+        """
+        storage_cls = self.lightrag.key_string_value_json_storage_cls
+        if getattr(self.lightrag, "kv_storage", "") == "PGKVStorage":
+            from lightrag.kg.json_kv_impl import JsonKVStorage
+
+            storage_cls = JsonKVStorage
+        return storage_cls(
+            namespace=namespace,
+            workspace=self.lightrag.workspace,
+            global_config=self.lightrag.__dict__,
+            embedding_func=self.embedding_func,
+        )
+
     def _initialize_processors(self):
         """Initialize multimodal processors with appropriate model functions"""
         if self.lightrag is None:
@@ -368,12 +386,7 @@ class RAGAnything(QueryMixin, ProcessorMixin, BatchMixin):
                         self.logger.info(
                             "Initializing parse cache for pre-provided LightRAG instance"
                         )
-                        parse_cache = self.lightrag.key_string_value_json_storage_cls(
-                            namespace="parse_cache",
-                            workspace=self.lightrag.workspace,
-                            global_config=self.lightrag.__dict__,
-                            embedding_func=self.embedding_func,
-                        )
+                        parse_cache = self._create_aux_kv_storage("parse_cache")
                         await parse_cache.initialize()
                         self.parse_cache = parse_cache
 
@@ -381,13 +394,8 @@ class RAGAnything(QueryMixin, ProcessorMixin, BatchMixin):
                         self.logger.info(
                             "Initializing multimodal status cache for pre-provided LightRAG instance"
                         )
-                        multimodal_status_cache = (
-                            self.lightrag.key_string_value_json_storage_cls(
-                                namespace="multimodal_status",
-                                workspace=self.lightrag.workspace,
-                                global_config=self.lightrag.__dict__,
-                                embedding_func=self.embedding_func,
-                            )
+                        multimodal_status_cache = self._create_aux_kv_storage(
+                            "multimodal_status"
                         )
                         await multimodal_status_cache.initialize()
                         self.multimodal_status_cache = multimodal_status_cache
@@ -444,22 +452,12 @@ class RAGAnything(QueryMixin, ProcessorMixin, BatchMixin):
                 await initialize_pipeline_status()
 
                 # Initialize parse cache storage using LightRAG's KV storage
-                parse_cache = self.lightrag.key_string_value_json_storage_cls(
-                    namespace="parse_cache",
-                    workspace=self.lightrag.workspace,
-                    global_config=self.lightrag.__dict__,
-                    embedding_func=self.embedding_func,
-                )
+                parse_cache = self._create_aux_kv_storage("parse_cache")
                 await parse_cache.initialize()
                 self.parse_cache = parse_cache
 
-                multimodal_status_cache = (
-                    self.lightrag.key_string_value_json_storage_cls(
-                        namespace="multimodal_status",
-                        workspace=self.lightrag.workspace,
-                        global_config=self.lightrag.__dict__,
-                        embedding_func=self.embedding_func,
-                    )
+                multimodal_status_cache = self._create_aux_kv_storage(
+                    "multimodal_status"
                 )
                 await multimodal_status_cache.initialize()
                 self.multimodal_status_cache = multimodal_status_cache

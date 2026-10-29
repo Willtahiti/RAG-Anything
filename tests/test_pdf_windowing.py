@@ -113,9 +113,7 @@ def test_bad_page_is_isolated_and_skipped(tmp_path):
             raise RuntimeError("corrupt page")
         return blocks
 
-    blocks = parse_pdf_in_windows(
-        parse, pdf, tmp_path / "w", window_pages=8, retries=0
-    )
+    blocks = parse_pdf_in_windows(parse, pdf, tmp_path / "w", window_pages=8, retries=0)
     texts = {b["page_idx"]: b for b in blocks}
     assert sorted(texts) == list(range(8))
     assert texts[5].get("parse_error") is True
@@ -245,7 +243,9 @@ class _RecordingParser(MineruParser):
 def test_small_pdf_is_parsed_whole(tmp_path):
     pdf = _make_pdf(tmp_path / "small.pdf", 5)
     parser = _RecordingParser()
-    blocks = parser.parse_pdf(pdf, str(tmp_path / "o"), window_pages=2, window_threshold=10)
+    blocks = parser.parse_pdf(
+        pdf, str(tmp_path / "o"), window_pages=2, window_threshold=10
+    )
     assert len(blocks) == 5 and len(parser.calls) == 1
     assert "window_pages" not in parser.calls[0][1]
 

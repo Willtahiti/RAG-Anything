@@ -216,7 +216,8 @@ def stitch_cross_page_tables(
             and isinstance(block, dict)
             and block.get("type") == "table"
             and prev.get("type") == "table"
-            and int(block.get("page_idx", 0)) == int(prev.get("merged_end_page", prev.get("page_idx", 0))) + 1
+            and int(block.get("page_idx", 0))
+            == int(prev.get("merged_end_page", prev.get("page_idx", 0))) + 1
             and not _caption_text(block.get("table_caption"))
         ):
             body_a, body_b = _table_body(prev), _table_body(block)
@@ -229,9 +230,9 @@ def stitch_cross_page_tables(
                         prev["merged_end_page"] = int(block.get("page_idx", 0))
                         foot = list(block.get("table_footnote") or [])
                         if foot:
-                            prev["table_footnote"] = list(
-                                prev.get("table_footnote") or []
-                            ) + foot
+                            prev["table_footnote"] = (
+                                list(prev.get("table_footnote") or []) + foot
+                            )
                         continue
         merged.append(dict(block) if isinstance(block, dict) else block)
     for block in merged:
@@ -278,7 +279,10 @@ def parse_pdf_in_windows(
     manifest_path = ckpt_dir / "manifest.json"
     if manifest_path.exists():
         try:
-            same = json.loads(manifest_path.read_text("utf-8")).get("fingerprint") == fingerprint
+            same = (
+                json.loads(manifest_path.read_text("utf-8")).get("fingerprint")
+                == fingerprint
+            )
         except (OSError, ValueError):
             same = False
         if not (resume and same):
@@ -287,7 +291,11 @@ def parse_pdf_in_windows(
             ckpt_dir.mkdir(parents=True, exist_ok=True)
     _write_json_atomic(
         manifest_path,
-        {"fingerprint": fingerprint, "total_pages": total, "window_pages": window_pages},
+        {
+            "fingerprint": fingerprint,
+            "total_pages": total,
+            "window_pages": window_pages,
+        },
     )
 
     pdfium = _pdfium()
@@ -315,9 +323,7 @@ def parse_pdf_in_windows(
             raise
         except Exception as exc:
             if attempts_left > 0:
-                logger.warning(
-                    "Pages %d-%d failed (%s); retrying", start + 1, end, exc
-                )
+                logger.warning("Pages %d-%d failed (%s); retrying", start + 1, end, exc)
                 return run_range(start, end, attempts_left - 1)
             if end - start > 1:
                 mid = (start + end) // 2

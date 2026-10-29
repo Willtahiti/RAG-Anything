@@ -73,7 +73,9 @@ async def resume_unfinished(
     rag: Any,
     search_dirs: Iterable[Union[str, Path]] = (),
     *,
-    on_progress: Optional[Callable[[Dict[str, Any]], Union[None, Awaitable[None]]]] = None,
+    on_progress: Optional[
+        Callable[[Dict[str, Any]], Union[None, Awaitable[None]]]
+    ] = None,
     **process_kwargs: Any,
 ) -> Dict[str, List[Dict[str, Any]]]:
     """Re-run ingestion for every unfinished document whose file can be found.

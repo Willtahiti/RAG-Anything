@@ -62,7 +62,9 @@ def test_detects_only_the_plan_page(pdf):
 
 
 def test_blocks_for_plan_page(pdf, tmp_path):
-    cfg = DrawingConfig(dpi=60, tile_px=400, overlap_px=40, max_tiles=6, overview_px=500)
+    cfg = DrawingConfig(
+        dpi=60, tile_px=400, overlap_px=40, max_tiles=6, overview_px=500
+    )
     content = [
         {"type": "text", "text": "intro", "page_idx": 0},
         {"type": "image", "img_path": "/x/lowres.png", "page_idx": 1},  # parser's copy

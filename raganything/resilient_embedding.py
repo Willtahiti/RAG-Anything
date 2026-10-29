@@ -90,7 +90,9 @@ def validate_embeddings(
     except (TypeError, ValueError) as exc:
         raise EmbeddingValidationError(f"embeddings are not numeric: {exc}") from exc
     if array.ndim != 2:
-        raise EmbeddingValidationError(f"expected a 2-D result, got shape {array.shape}")
+        raise EmbeddingValidationError(
+            f"expected a 2-D result, got shape {array.shape}"
+        )
     if array.shape[0] != n_texts:
         raise EmbeddingValidationError(
             f"got {array.shape[0]} vectors for {n_texts} texts"
@@ -150,7 +152,9 @@ class ResilientCaller:
         }
 
     def _delay(self, attempt: int) -> float:
-        delay = min(self.base_delay * (2 ** min(max(attempt - 1, 0), 16)), self.max_delay)
+        delay = min(
+            self.base_delay * (2 ** min(max(attempt - 1, 0), 16)), self.max_delay
+        )
         return delay * (1.0 + random.uniform(0, 0.25))
 
     async def _call_once(self, args: tuple, kwargs: dict) -> Any:

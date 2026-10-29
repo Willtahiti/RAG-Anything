@@ -791,7 +791,9 @@ class ProcessorMixin:
                     **kwargs,
                 )
             elif ext in EMAIL_FILE_EXTENSIONS:
-                self.logger.info("Detected Outlook message, parsing mail and attachments...")
+                self.logger.info(
+                    "Detected Outlook message, parsing mail and attachments..."
+                )
                 parse_email = getattr(doc_parser, "parse_email", None)
                 if parse_email is None:
                     content_list = await asyncio.to_thread(

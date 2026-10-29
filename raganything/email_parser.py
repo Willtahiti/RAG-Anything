@@ -323,8 +323,7 @@ def parse_msg(
         import extract_msg
     except ImportError as exc:
         raise ImportError(
-            "Reading .msg files requires extract-msg: "
-            "pip install 'raganything[email]'"
+            "Reading .msg files requires extract-msg: pip install 'raganything[email]'"
         ) from exc
 
     output_dir = Path(output_dir)

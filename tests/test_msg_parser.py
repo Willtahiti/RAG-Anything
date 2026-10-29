@@ -100,7 +100,8 @@ def test_second_attachment_pages_follow_first(tmp_path, fake_extract_msg):
 
 def test_html_body_fallback(tmp_path, fake_extract_msg):
     fake_extract_msg["mail.msg"] = FakeMessage(
-        body="", html=b"<html><body><p>Hello&nbsp;<b>you</b></p><p>Bye</p></body></html>"
+        body="",
+        html=b"<html><body><p>Hello&nbsp;<b>you</b></p><p>Bye</p></body></html>",
     )
     blocks = parse_msg(_msg_file(tmp_path), tmp_path / "out")
     assert blocks[1]["text"] == "Hello you\n\nBye" or blocks[1]["text"].startswith(
@@ -161,7 +162,9 @@ def test_attachment_failure_does_not_lose_mail(tmp_path, fake_extract_msg):
 def test_nested_msg_respects_depth(tmp_path, fake_extract_msg):
     inner = FakeMessage(subject="Inner", body="inner body")
     middle = FakeMessage(
-        subject="Middle", body="middle body", attachments=[FakeAttachment("i.msg", inner, True)]
+        subject="Middle",
+        body="middle body",
+        attachments=[FakeAttachment("i.msg", inner, True)],
     )
     fake_extract_msg["mail.msg"] = FakeMessage(
         attachments=[FakeAttachment("m.msg", middle, True)]
@@ -257,7 +260,12 @@ def _blk(text):
 
 def test_email_formats_in_supported_extensions():
     assert ".msg" in Parser.EMAIL_FORMATS
-    assert ".msg" in BatchParser(parser_type="mineru", skip_installation_check=True).get_supported_extensions()
+    assert (
+        ".msg"
+        in BatchParser(
+            parser_type="mineru", skip_installation_check=True
+        ).get_supported_extensions()
+    )
     assert ".msg" in RAGAnythingConfig().supported_file_extensions
 
 

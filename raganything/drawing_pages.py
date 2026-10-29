@@ -186,7 +186,9 @@ def tile_grid(width: int, height: int, cfg: DrawingConfig) -> List[tuple]:
         for col in range(cols):
             left = min(col * step, max(width - tile, 0))
             top = min(row * step, max(height - tile, 0))
-            boxes.append((left, top, min(left + tile, width), min(top + tile, height), row, col))
+            boxes.append(
+                (left, top, min(left + tile, width), min(top + tile, height), row, col)
+            )
     return boxes
 
 
@@ -326,7 +328,9 @@ def add_drawing_blocks(
 
     drawing_pages: Set[int] = {d.index for d in drawings}
     logger.info(
-        "Detected %d technical drawing page(s) in %s", len(drawings), Path(pdf_path).name
+        "Detected %d technical drawing page(s) in %s",
+        len(drawings),
+        Path(pdf_path).name,
     )
     result = [
         b
@@ -341,7 +345,9 @@ def add_drawing_blocks(
     text_pages = {
         b.get("page_idx")
         for b in result
-        if isinstance(b, dict) and b.get("type") == "text" and str(b.get("text", "")).strip()
+        if isinstance(b, dict)
+        and b.get("type") == "text"
+        and str(b.get("text", "")).strip()
     }
 
     pdfium = _pdfium()
