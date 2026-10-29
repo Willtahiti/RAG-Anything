@@ -1,0 +1,16 @@
+This repository is a modified fork of RAG-Anything.
+
+Original work:
+  RAG-Anything — https://github.com/HKUDS/RAG-Anything
+  Copyright (c) 2025 Data Intelligence Lab@HKU
+  Licensed under the MIT License (see LICENSE, which is unchanged).
+
+Authors of the paper "RAG-Anything: All-in-One RAG Framework"
+(arXiv:2510.12323): Zirui Guo, Xubin Ren, Lingrui Xu, Jiahao Zhang, Chao Huang.
+
+Modifications in this fork (Outlook .msg ingestion, windowed parsing of very
+large PDFs, technical-drawing handling, resilient embeddings, PostgreSQL
+storage, export/import, web and command-line interfaces) are provided under
+the same MIT License. The original authors have not endorsed them.
+
+RAG-Anything builds on LightRAG (https://github.com/HKUDS/LightRAG, MIT).

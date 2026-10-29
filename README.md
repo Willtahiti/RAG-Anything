@@ -6,7 +6,7 @@
 
 # 🚀 RAG-Anything: All-in-One RAG Framework
 
-> **Fork additions:** Outlook `.msg` files, resumable parsing of very large PDFs, technical drawings, resilient embeddings, PostgreSQL storage with export/import, and a web/CLI interface with cited sources. See [docs/technical_docs.md](docs/technical_docs.md).
+> **This is a modified fork of [HKUDS/RAG-Anything](https://github.com/HKUDS/RAG-Anything)** by the Data Intelligence Lab@HKU, released under the MIT License. All credit for the framework, its design and the underlying research belongs to the original authors. This fork is not affiliated with or endorsed by them. See [Fork notice](#-fork-notice-and-attribution) and [What this fork adds](#-what-this-fork-adds).
 
 <a href="https://trendshift.io/repositories/14959" target="_blank"><img src="https://trendshift.io/api/badge/repositories/14959" alt="HKUDS%2FRAG-Anything | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 
@@ -62,6 +62,24 @@
 - [X] [2025.07]🎯📢 RAG-Anything now features a [context configuration module](docs/context_aware_processing.md), enabling intelligent integration of relevant contextual information to enhance multimodal content processing.
 - [X] [2025.07]🎯📢 🚀 RAG-Anything now supports multimodal query capabilities, enabling enhanced RAG with seamless processing of text, images, tables, and equations.
 - [X] [2025.07]🎯📢 🎉 RAG-Anything has reached 1k🌟 stars on GitHub! Thank you for your incredible support and valuable contributions to the project.
+
+---
+
+## 🧩 What this fork adds
+
+Changes made on top of the upstream project to index Outlook mails and very large technical PDFs (plans, multi-column tables) with local models. Details and settings: [docs/technical_docs.md](docs/technical_docs.md).
+
+| Addition | Summary |
+|---|---|
+| 📧 **Outlook `.msg`** | Headers, body and recursive attachments (PDF, Office, images, nested `.msg`). `pip install "raganything[email]"` |
+| 📚 **Very large PDFs** | Parsed in resumable windows (default 200 pages) with checkpoints, bad-page isolation and cross-page table stitching, for documents of several thousand pages |
+| 📐 **Technical drawings** | Plan pages detected, rendered as overview + overlapping tiles and described by the vision model with a drawing-specific prompt |
+| 🔌 **Resilient embeddings** | Waits out model-server disconnections, validates every vector, resumes interrupted documents |
+| 🗄️ **PostgreSQL + pgvector** | Optional storage backend ([docs/postgres_setup.md](docs/postgres_setup.md), `docker-compose.pg.yml`) |
+| 📦 **Export / import** | Exact snapshots and a portable bundle between file storage and PostgreSQL |
+| 🌐 **Web interface and CLI** | Ingestion page and search page; answers cite their sources (📄 🖼️ 📊 📐 ✉️) with links to the original at the cited page and a hover preview. `pip install "raganything[app]"`, then `python -m raganything.app` or `python -m raganything.cli` |
+
+New code lives in `raganything/email_parser.py`, `pdf_windowing.py`, `drawing_pages.py`, `resilient_embedding.py`, `resume.py`, `export.py`, `cli.py` and `raganything/app/`. Upstream modules were extended where needed (parsers, processor, configuration, image processor and prompts).
 
 ---
 
@@ -1303,6 +1321,14 @@ Different content types require specific optional dependencies:
     <div style="position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); width: 20px; height: 20px; background: white; border-right: 2px solid #00d9ff; border-bottom: 2px solid #00d9ff; transform: rotate(45deg);"></div>
   </div>
 </div>
+
+## 📜 Fork notice and attribution
+
+- **Original work:** [RAG-Anything](https://github.com/HKUDS/RAG-Anything), Copyright (c) 2025 Data Intelligence Lab@HKU, MIT License. The upstream license and copyright notice are kept unchanged in [LICENSE](LICENSE) and must stay with every copy or substantial portion of this software; see also [NOTICE](NOTICE).
+- **Modifications:** the additions listed above were made in this fork and are provided under the same MIT License. The full change history is in the git log; the upstream history is preserved.
+- **Not endorsed:** the original authors did not review or endorse these modifications and are not responsible for them. Report issues with this fork here, not upstream, unless you can reproduce them on the unmodified upstream code.
+- **Citing:** if you use RAG-Anything in research, please cite the original paper below, not this fork.
+- Names, logos and project links of the original project (logo, badges, links to HKUDS repositories, Discord and WeChat groups) remain those of the upstream project.
 
 If you find RAG-Anything useful in your research, please cite our paper:
 
