@@ -1307,6 +1307,83 @@ class Parser:
             source_dir=text_path.parent,
         )
 
+    # Parsers whose parse_pdf honours the window_* options (see pdf_windowing).
+    SUPPORTS_PDF_WINDOWING = False
+
+    def _maybe_parse_windowed(
+        self,
+        pdf_path: Path,
+        output_dir: Optional[str],
+        method: str,
+        lang: Optional[str],
+        kwargs: Dict[str, Any],
+    ) -> Optional[List[Dict[str, Any]]]:
+        """Parse a huge PDF window by window; None means "parse it whole".
+
+        Pops the ``window_*`` options (and the internal ``_in_window`` marker)
+        out of ``kwargs`` so they never reach the parser backend.
+        """
+        from .pdf_windowing import (
+            count_pdf_pages,
+            parse_pdf_in_windows,
+            window_settings,
+        )
+        from .parse_options import relevant_parser_kwargs
+
+        in_window = kwargs.pop("_in_window", False)
+        settings = window_settings(kwargs)
+        if in_window or settings["pages"] <= 0:
+            return None
+        try:
+            total = count_pdf_pages(pdf_path)
+        except Exception as exc:
+            self.logger.warning(
+                "Cannot count pages of %s (%s); parsing it whole", pdf_path, exc
+            )
+            return None
+        if total <= max(settings["threshold"], settings["pages"]):
+            return None
+
+        base_dir = (
+            self._unique_output_dir(output_dir, pdf_path)
+            if output_dir
+            else pdf_path.parent / f"{pdf_path.stem}_windows"
+        )
+        window_kwargs = dict(kwargs)
+        if settings["timeout"] is not None:
+            window_kwargs.setdefault("timeout", settings["timeout"])
+        self.logger.info(
+            f"Large PDF ({total} pages): parsing in windows of "
+            f"{settings['pages']} pages"
+        )
+
+        def parse_window(window_pdf: Path, out_dir: Path):
+            return self.parse_pdf(
+                pdf_path=window_pdf,
+                output_dir=str(out_dir),
+                method=method,
+                lang=lang,
+                _in_window=True,
+                **window_kwargs,
+            )
+
+        return parse_pdf_in_windows(
+            parse_window,
+            pdf_path,
+            base_dir,
+            window_pages=settings["pages"],
+            resume=settings["resume"],
+            retries=settings["retries"],
+            progress=settings["progress"],
+            total_pages=total,
+            fingerprint_extra={
+                "parser": type(self).__name__,
+                "method": method,
+                "lang": lang,
+                **relevant_parser_kwargs(kwargs),
+            },
+        )
+
     def parse_email(
         self,
         email_path: Union[str, Path],
@@ -1450,6 +1527,8 @@ class MineruParser(Parser):
 
     Note: Office documents are no longer directly supported. Please convert them to PDF first.
     """
+
+    SUPPORTS_PDF_WINDOWING = True
 
     __slots__ = ()
 
@@ -2143,6 +2222,12 @@ class MineruParser(Parser):
             if not pdf_path.exists():
                 raise FileNotFoundError(f"PDF file does not exist: {pdf_path}")
 
+            windowed = self._maybe_parse_windowed(
+                pdf_path, output_dir, method, lang, kwargs
+            )
+            if windowed is not None:
+                return windowed
+
             # Prepare output directory — use unique subdirectory to prevent
             # same-name file collisions when output_dir is shared (#51)
             if output_dir:
@@ -2543,6 +2628,8 @@ class DoclingParser(Parser):
     duplicating Docling model loads on first use.
     """
 
+    SUPPORTS_PDF_WINDOWING = True
+
     # Define Docling-specific formats
     HTML_FORMATS = set(HTML_FILE_EXTENSIONS)
 
@@ -2583,6 +2670,12 @@ class DoclingParser(Parser):
             pdf_path = Path(pdf_path)
             if not pdf_path.exists():
                 raise FileNotFoundError(f"PDF file does not exist: {pdf_path}")
+
+            windowed = self._maybe_parse_windowed(
+                pdf_path, output_dir, method, lang, kwargs
+            )
+            if windowed is not None:
+                return windowed
 
             name_without_suff = pdf_path.stem
 

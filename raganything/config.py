@@ -5,7 +5,7 @@ Contains configuration dataclasses with environment variable support
 """
 
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Optional
 from lightrag.utils import get_env_value
 
 
@@ -34,6 +34,26 @@ class RAGAnythingConfig:
 
     parser: str = field(default_factory=lambda: get_env_value("PARSER", "mineru", str))
     """Parser selection: 'mineru', 'docling', or 'paddleocr'."""
+
+    pdf_window_pages: int = field(
+        default_factory=lambda: get_env_value("PDF_WINDOW_PAGES", 200, int)
+    )
+    """Pages per window when a large PDF is parsed in windows (0 disables)."""
+
+    pdf_window_threshold: int = field(
+        default_factory=lambda: get_env_value("PDF_WINDOW_THRESHOLD", 400, int)
+    )
+    """PDFs with at most this many pages are parsed in one run."""
+
+    pdf_window_timeout: Optional[int] = field(
+        default_factory=lambda: get_env_value("PDF_WINDOW_TIMEOUT", None, int)
+    )
+    """Maximum seconds for one window (MinerU); None means no limit."""
+
+    pdf_resume: bool = field(
+        default_factory=lambda: get_env_value("PDF_RESUME", True, bool)
+    )
+    """Reuse the checkpoints of already-parsed windows when a parse is rerun."""
 
     display_content_stats: bool = field(
         default_factory=lambda: get_env_value("DISPLAY_CONTENT_STATS", True, bool)

@@ -700,12 +700,24 @@ class ProcessorMixin:
 
             if ext in [".pdf"]:
                 self.logger.info("Detected PDF file, using parser for PDF...")
+                pdf_kwargs = dict(kwargs)
+                if getattr(doc_parser, "SUPPORTS_PDF_WINDOWING", False):
+                    # Very large PDFs are parsed window by window (resumable)
+                    for option, config_name in (
+                        ("window_pages", "pdf_window_pages"),
+                        ("window_threshold", "pdf_window_threshold"),
+                        ("window_timeout", "pdf_window_timeout"),
+                        ("window_resume", "pdf_resume"),
+                    ):
+                        value = getattr(self.config, config_name, None)
+                        if value is not None:
+                            pdf_kwargs.setdefault(option, value)
                 content_list = await asyncio.to_thread(
                     doc_parser.parse_pdf,
                     pdf_path=file_path,
                     output_dir=output_dir,
                     method=parse_method,
-                    **kwargs,
+                    **pdf_kwargs,
                 )
             elif ext in AUDIO_FILE_EXTENSIONS or ext in VIDEO_FILE_EXTENSIONS:
                 # Media files need no document parser: they become a single
