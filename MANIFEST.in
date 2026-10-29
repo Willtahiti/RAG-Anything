@@ -9,3 +9,4 @@ include reproduce/env.example
 global-exclude *.pyc
 global-exclude __pycache__
 global-exclude *.egg-info
+recursive-include raganything/app/static *

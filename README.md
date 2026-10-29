@@ -6,6 +6,8 @@
 
 # 🚀 RAG-Anything: All-in-One RAG Framework
 
+> **Fork additions:** Outlook `.msg` files, resumable parsing of very large PDFs, technical drawings, resilient embeddings, PostgreSQL storage with export/import, and a web/CLI interface with cited sources. See [docs/technical_docs.md](docs/technical_docs.md).
+
 <a href="https://trendshift.io/repositories/14959" target="_blank"><img src="https://trendshift.io/api/badge/repositories/14959" alt="HKUDS%2FRAG-Anything | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 
 <div align="center">

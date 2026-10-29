@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ingestion</title><link rel="stylesheet" href="/static/app.css"></head>
+<body><header></header>
+<main>
+ <div class="card">
+  <div id="drop" tabindex="0">Glissez des fichiers ici (.pdf, .msg, Office, images…) ou
+   <button id="pick" type="button">choisir</button><input id="file" type="file" multiple hidden></div>
+  <p class="muted" id="msg" role="status"></p>
+ </div>
+ <div class="card"><b>Traitements</b><table><thead><tr><th>Fichier</th><th>État</th><th>Avancement</th><th></th></tr></thead><tbody id="jobs"></tbody></table></div>
+ <div class="card"><b>Documents indexés</b> <button id="refresh" type="button">Actualiser</button>
+  <table><thead><tr><th>Fichier</th><th>Statut</th><th>Chunks</th><th></th></tr></thead><tbody id="docs"></tbody></table></div>
+</main>
+<script src="/static/common.js"></script>
+<script>
+nav('ingest');
+const msg=t=>document.getElementById('msg').textContent=t;
+async function upload(files){
+  if(!files.length)return;
+  const fd=new FormData();[...files].forEach(f=>fd.append('files',f));
+  msg(`Envoi de ${files.length} fichier(s)…`);
+  try{const r=await api('/api/ingest',{method:'POST',body:fd});msg(`${r.jobs.length} traitement(s) en file.`)}catch(e){msg(e.message)}
+}
+const drop=document.getElementById('drop'),input=document.getElementById('file');
+document.getElementById('pick').onclick=()=>input.click();
+input.onchange=()=>upload(input.files);
+['dragover','dragenter'].forEach(t=>drop.addEventListener(t,e=>{e.preventDefault();drop.classList.add('over')}));
+['dragleave','drop'].forEach(t=>drop.addEventListener(t,e=>{e.preventDefault();drop.classList.remove('over')}));
+drop.addEventListener('drop',e=>upload(e.dataTransfer.files));
+const STATE={queued:'En attente',running:'En cours',done:'Terminé',failed:'Échec',cancelled:'Annulé',interrupted:'Interrompu'};
+function renderJobs(jobs){
+  document.getElementById('jobs').replaceChildren(...jobs.map(j=>{
+    const pct=j.total_pages?Math.round(100*j.done_pages/j.total_pages):null;
+    const act=(a,l)=>el('button',{type:'button',onclick:()=>api(`/api/jobs/${j.id}/${a}`,{method:'POST'})},l);
+    return el('tr',{},
+      el('td',{},j.file),
+      el('td',{class:'st-'+j.status},STATE[j.status]||j.status,j.error?el('div',{class:'muted'},j.error):''),
+      el('td',{},j.status==='running'?(pct!==null?[el('progress',{value:pct,max:100}),`${j.done_pages}/${j.total_pages} p.`]:j.stage):''),
+      el('td',{},['failed','interrupted','cancelled'].includes(j.status)?act('resume','Reprendre'):'',
+                 ['running','queued'].includes(j.status)?act('cancel','Annuler'):''));
+  }));
+}
+const es=new EventSource('/api/jobs/stream');
+es.onmessage=e=>{renderJobs(JSON.parse(e.data));loadDocs()};
+async function loadDocs(){
+  const docs=await api('/api/documents');
+  document.getElementById('docs').replaceChildren(...docs.map(d=>el('tr',{},
+    el('td',{},d.has_original?el('a',{href:`/api/files/${d.doc_id}`,target:'_blank'},d.file):d.file),
+    el('td',{},d.status),el('td',{},String(d.chunks??'')),
+    el('td',{},el('button',{type:'button',onclick:async()=>{if(confirm(`Supprimer ${d.file} ?`)){await api(`/api/documents/${d.doc_id}`,{method:'DELETE'});loadDocs()}}},'Supprimer')))));
+}
+document.getElementById('refresh').onclick=loadDocs;loadDocs();
+</script></body></html>

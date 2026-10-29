@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Recherche</title><link rel="stylesheet" href="/static/app.css"></head>
+<body><header></header>
+<main>
+ <form class="ask" id="ask">
+  <input type="text" id="q" placeholder="Posez votre question…" autofocus required aria-label="Question">
+  <select id="mode" aria-label="Mode"><option value="mix">mix</option><option value="hybrid">hybrid</option><option value="local">local</option><option value="global">global</option><option value="naive">naive</option></select>
+  <button class="primary" id="go">Rechercher</button>
+ </form>
+ <div id="out"></div>
+</main>
+<div id="pop" role="tooltip"></div>
+<script src="/static/common.js"></script>
+<script>
+nav('search');
+const pop=document.getElementById('pop');
+function highlight(text,terms){
+  const frag=document.createDocumentFragment();
+  if(!terms.length){frag.append(text);return frag}
+  const re=new RegExp('('+terms.map(t=>t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')','gi');
+  text.split(re).forEach((part,i)=>frag.append(i%2?el('mark',{},part):part));
+  return frag;
+}
+function showPop(anchor,s,terms){
+  const where=s.page?`p.${s.page}${s.page_end&&s.page_end!==s.page?'–'+s.page_end:''}`:'';
+  pop.replaceChildren(
+    el('h4',{},`${KIND_EMOJI[s.kind]} ${KIND_LABEL[s.kind]} — ${s.file||''} ${where}`),
+    s.asset_url?el('img',{src:s.asset_url,alt:''}):'',
+    el('div',{},highlight(s.excerpt||'',terms)));
+  pop.style.display='block';
+  const r=anchor.getBoundingClientRect();
+  pop.style.left=Math.max(8,Math.min(r.left,innerWidth-pop.offsetWidth-8))+'px';
+  const below=r.bottom+8;
+  pop.style.top=(below+pop.offsetHeight>innerHeight?Math.max(8,r.top-pop.offsetHeight-8):below)+'px';
+}
+function badge(s,terms){
+  const a=el('a',{class:'src',href:s.link||'#',target:'_blank',rel:'noopener','aria-label':`Source ${s.n} : ${s.file} ${s.page?'page '+s.page:''}`},KIND_EMOJI[s.kind],el('sup',{},String(s.n)));
+  const on=()=>showPop(a,s,terms),off=()=>pop.style.display='none';
+  a.addEventListener('mouseenter',on);a.addEventListener('focus',on);
+  a.addEventListener('mouseleave',off);a.addEventListener('blur',off);
+  return a;
+}
+function renderAnswer(text,sources,terms){
+  const byN=Object.fromEntries(sources.map(s=>[s.n,s]));
+  const box=el('div',{class:'answer'});
+  text.split(/(\[\d+\])/).forEach(part=>{
+    const m=part.match(/^\[(\d+)\]$/);
+    box.append(m&&byN[m[1]]?badge(byN[m[1]],terms):part);
+  });
+  return box;
+}
+document.getElementById('ask').addEventListener('submit',async ev=>{
+  ev.preventDefault();
+  const q=document.getElementById('q').value.trim(),out=document.getElementById('out'),go=document.getElementById('go');
+  go.disabled=true;out.replaceChildren(el('p',{class:'muted'},'Recherche en cours…'));
+  try{
+    const r=await api('/api/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,mode:document.getElementById('mode').value})});
+    const terms=[...new Set((q.toLowerCase().match(/\p{L}{4,}/gu)||[]))];
+    const list=el('ul',{class:'sources'},r.sources.map(s=>el('li',{},badge(s,terms),' ',el('span',{class:'muted'},`${s.file}${s.page?' · p.'+s.page:''}`))));
+    out.replaceChildren(el('div',{class:'card'},renderAnswer(r.answer,r.sources,terms)),
+      r.sources.length?el('div',{class:'card'},el('b',{},'Sources'),list):'');
+  }catch(e){out.replaceChildren(el('p',{class:'st-failed'},e.message))}
+  go.disabled=false;
+});
+</script></body></html>
