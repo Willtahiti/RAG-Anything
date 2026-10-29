@@ -6,6 +6,8 @@
 
 # 🚀 RAG-Anything: All-in-One RAG System
 
+> **本仓库是 [HKUDS/RAG-Anything](https://github.com/HKUDS/RAG-Anything) 的修改版分支**（香港大学数据智能实验室 Data Intelligence Lab@HKU，MIT 许可证）。框架、设计及相关研究的全部功劳归原作者所有；本分支与原作者无隶属关系，也未获其认可。详见下方「分支声明与署名」及英文版 [README.md](README.md) 中的 “What this fork adds”。
+
 <div align="center">
   <div style="width: 100%; height: 2px; margin: 20px 0; background: linear-gradient(90deg, transparent, #00d9ff, transparent);"></div>
 </div>
@@ -1239,6 +1241,13 @@ MinerU 将 v2 标记为持续演进的输出 schema。RAG-Anything 会记录并�
     <div style="position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); width: 20px; height: 20px; background: white; border-right: 2px solid #00d9ff; border-bottom: 2px solid #00d9ff; transform: rotate(45deg);"></div>
   </div>
 </div>
+
+## 📜 分支声明与署名
+
+- **原作品：** [RAG-Anything](https://github.com/HKUDS/RAG-Anything)，Copyright (c) 2025 Data Intelligence Lab@HKU，MIT 许可证。上游的许可证与版权声明在 [LICENSE](LICENSE) 中保持不变，任何副本或主要部分都必须随附；另见 [NOTICE](NOTICE)。
+- **修改内容：** 本分支新增了 Outlook `.msg` 导入、超大 PDF 分段解析、技术图纸处理、可容错的向量化、PostgreSQL 存储、导出/导入以及 Web/命令行界面，同样以 MIT 许可证提供。
+- **未获认可：** 原作者未审阅或认可这些修改，也不对其负责。与本分支相关的问题请在此提交，除非能在未修改的上游代码上复现。
+- **引用：** 如在研究中使用 RAG-Anything，请引用下方的原论文，而非本分支。
 
 ```bibtex
 @misc{guo2025raganythingallinoneragframework,
