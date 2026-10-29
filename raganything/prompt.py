@@ -149,6 +149,46 @@ Image details:
 Focus on providing accurate, detailed visual analysis that incorporates the context and would be useful for knowledge retrieval.
 Use a semantic entity_name; do not return file names or figure numbers such as figure_30_1 unless they are the actual title."""
 
+# Technical drawings (electrical / plumbing / HVAC / architectural plans)
+PROMPTS["DRAWING_ANALYSIS_SYSTEM"] = (
+    "You are an expert in reading technical drawings (electrical, plumbing, HVAC, "
+    "architectural and industrial plans). Describe precisely and exhaustively; never "
+    "invent values that are not legible in the image."
+)
+PROMPTS[
+    "drawing_vision_prompt"
+] = """Analyze this technical drawing (or one tile of a larger sheet) and provide a JSON response with the following structure:
+
+{{
+    "detailed_description": "An exhaustive description following these guidelines:
+    - Identify the discipline (electrical, plumbing, HVAC, fire safety, structure, architecture, ...) and the kind of drawing (floor plan, single-line diagram, schematic, section, detail, isometric, ...)
+    - Title block: transcribe drawing number, title, project, revision, date, scale, author, sheet number when visible
+    - Transcribe ALL legible text verbatim: tags, references, room names, notes, dimensions, ratings (A, kW, V, mm, DN, bar, ...), cable/pipe/duct sizes and materials
+    - List every symbol or equipment with its tag and what it is (outlet, switch, luminaire, breaker, panel, pump, valve, boiler, fixture, sensor, ...), and where it is (room, zone, grid reference, or position on the sheet)
+    - Describe connections and topology: circuits and their protection, feeders, pipe/duct runs, flow direction, which equipment is fed by or connected to which
+    - Explain the legend / symbol key if present, and the meaning of line styles and colors
+    - If this is a tile of a larger sheet, say which part of the sheet it shows and which elements continue beyond its edges
+    - Write the description in the language of the document text (keep labels verbatim); use specific names instead of pronouns",
+    "entity_info": {{
+        "entity_name": "{entity_name}",
+        "entity_type": "technical_drawing",
+        "summary": "concise summary: discipline, drawing number/title if known, area covered and the main systems shown (max 100 words)"
+    }}
+}}
+
+Context from surrounding content:
+{context}
+
+Document structure:
+- Section Path: {section_path}
+
+Image details:
+- Image Path: {image_path}
+- Captions: {captions}
+- Footnotes: {footnotes}
+
+Use a semantic entity_name that includes the discipline and, if legible, the drawing number or title; do not return file names."""
+
 # Image analysis prompt with text fallback
 PROMPTS["text_prompt"] = """Based on the following image information, provide analysis:
 

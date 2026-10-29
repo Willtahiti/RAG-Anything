@@ -237,6 +237,7 @@ class RAGAnything(QueryMixin, ProcessorMixin, BatchMixin):
                 lightrag=self.lightrag,
                 modal_caption_func=self.vision_model_func or self.llm_model_func,
                 context_extractor=self.context_extractor,
+                max_image_side=getattr(self.config, "max_image_side", 0) or None,
             )
 
         if self.config.enable_table_processing:

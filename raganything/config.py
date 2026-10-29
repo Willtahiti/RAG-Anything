@@ -67,6 +67,23 @@ class RAGAnythingConfig:
     )
     """Enable image content processing."""
 
+    enable_drawing_processing: bool = field(
+        default_factory=lambda: get_env_value("ENABLE_DRAWING_PROCESSING", True, bool)
+    )
+    """Detect technical-drawing pages in PDFs and describe them tile by tile
+    with the vision model (see ``raganything.drawing_pages``)."""
+
+    max_image_side: int = field(
+        default_factory=lambda: get_env_value("MAX_IMAGE_SIDE", 0, int)
+    )
+    """Downscale images whose longest side exceeds this many pixels before the
+    vision call (0 sends them unchanged). Useful with local vision models."""
+
+    min_image_pixels: int = field(
+        default_factory=lambda: get_env_value("MIN_IMAGE_PIXELS", 0, int)
+    )
+    """Skip extracted images with fewer pixels (logos, bullets); 0 keeps all."""
+
     enable_table_processing: bool = field(
         default_factory=lambda: get_env_value("ENABLE_TABLE_PROCESSING", True, bool)
     )

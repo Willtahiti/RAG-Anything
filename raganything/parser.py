@@ -1413,13 +1413,16 @@ class Parser:
             ext = path.suffix.lower()
             out_dir.mkdir(parents=True, exist_ok=True)
             if ext == ".pdf":
-                return self.parse_pdf(
+                from .drawing_pages import add_drawing_blocks
+
+                blocks = self.parse_pdf(
                     pdf_path=path,
                     output_dir=str(out_dir),
                     method=method,
                     lang=lang,
                     **kwargs,
                 )
+                return add_drawing_blocks(blocks, path, out_dir)
             if ext in self.OFFICE_FORMATS:
                 return self.parse_office_doc(
                     doc_path=path, output_dir=str(out_dir), lang=lang, **kwargs

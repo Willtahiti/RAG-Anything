@@ -577,12 +577,45 @@ def separate_content(
     return text_content, multimodal_items
 
 
-def encode_image_to_base64(image_path: str) -> str:
+def _downscale_image_bytes(data: bytes, max_side: int) -> bytes:
+    """Shrink image bytes so the longest side is ``max_side``; keep on failure.
+
+    Local vision models (Ollama/vLLM) handle a fixed number of image tokens, so
+    sending a 9000 px sheet only costs time and memory. Images already within
+    the limit are returned untouched.
+    """
+    try:
+        from io import BytesIO
+
+        from PIL import Image
+    except ImportError:
+        return data
+    try:
+        with Image.open(BytesIO(data)) as img:
+            if max(img.size) <= max_side:
+                return data
+            img.load()
+            ratio = max_side / max(img.size)
+            size = (max(1, round(img.width * ratio)), max(1, round(img.height * ratio)))
+            if img.mode not in ("RGB", "RGBA", "L"):
+                img = img.convert("RGBA" if "A" in img.mode else "RGB")
+            resized = img.resize(size, Image.LANCZOS)
+            out = BytesIO()
+            resized.save(out, format="PNG")
+            return out.getvalue()
+    except Exception as e:
+        logger.warning(f"Could not downscale image, sending it as is: {e}")
+        return data
+
+
+def encode_image_to_base64(image_path: str, max_side: Optional[int] = None) -> str:
     """
     Encode image file to base64 string
 
     Args:
         image_path: Path to the image file
+        max_side: Downscale images whose longest side exceeds this many pixels
+            (None or 0 sends the file unchanged)
 
     Returns:
         str: Base64 encoded string, empty string if encoding fails
@@ -597,6 +630,8 @@ def encode_image_to_base64(image_path: str) -> str:
     if not looks_like_image(data[:SIGNATURE_BYTES]):
         logger.warning(f"Not sending {image_path} to the vision model: not an image")
         return ""
+    if max_side and max_side > 0:
+        data = _downscale_image_bytes(data, max_side)
     return base64.b64encode(data).decode("utf-8")
 
 

@@ -928,6 +928,7 @@ class ImageModalProcessor(BaseModalProcessor):
         lightrag: LightRAG,
         modal_caption_func,
         context_extractor: ContextExtractor = None,
+        max_image_side: Optional[int] = None,
     ):
         """Initialize image processor
 
@@ -935,12 +936,15 @@ class ImageModalProcessor(BaseModalProcessor):
             lightrag: LightRAG instance
             modal_caption_func: Function for generating descriptions (supporting image understanding)
             context_extractor: Context extractor instance
+            max_image_side: Downscale images larger than this many pixels before
+                sending them to the vision model (None/0 keeps them unchanged)
         """
         super().__init__(lightrag, modal_caption_func, context_extractor)
+        self.max_image_side = max_image_side
 
     def _encode_image_to_base64(self, image_path: str) -> str:
         """Encode image to base64; ``""`` if unreadable or not an image."""
-        return encode_image_to_base64(image_path)
+        return encode_image_to_base64(image_path, getattr(self, "max_image_side", None))
 
     async def generate_description_only(
         self,
@@ -997,8 +1001,23 @@ class ImageModalProcessor(BaseModalProcessor):
             if item_info:
                 context = self._get_context_for_item(item_info)
 
+            is_drawing = content_data.get("image_kind") == "technical_drawing"
+            system_prompt = PROMPTS["IMAGE_ANALYSIS_SYSTEM"]
+
             # Build detailed visual analysis prompt with context
-            if context:
+            if is_drawing and "drawing_vision_prompt" in PROMPTS:
+                system_prompt = PROMPTS.get("DRAWING_ANALYSIS_SYSTEM", system_prompt)
+                vision_prompt = PROMPTS["drawing_vision_prompt"].format(
+                    context=context if context else "None",
+                    section_path=section_path if section_path else "None",
+                    entity_name=entity_name
+                    if entity_name
+                    else "unique descriptive name for this drawing",
+                    image_path=image_path,
+                    captions=", ".join(captions) if captions else "None",
+                    footnotes=", ".join(footnotes) if footnotes else "None",
+                )
+            elif context:
                 vision_prompt = PROMPTS.get(
                     "vision_prompt_with_context", PROMPTS["vision_prompt"]
                 ).format(
@@ -1031,7 +1050,7 @@ class ImageModalProcessor(BaseModalProcessor):
             response = await self.modal_caption_func(
                 vision_prompt,
                 image_data=image_base64,
-                system_prompt=PROMPTS["IMAGE_ANALYSIS_SYSTEM"],
+                system_prompt=system_prompt,
             )
 
             # Parse response (reuse existing logic)
