@@ -56,8 +56,20 @@ video = [
     "av<19",  # see audio
     "opencv-python>=4.8.0",
 ]
+email = ["extract-msg>=0.50.0"]  # Outlook .msg files
+app = [
+    "fastapi>=0.110",
+    "uvicorn>=0.27",
+    "python-multipart>=0.0.9",
+    "httpx>=0.25",
+]
 all = [
     "Pillow>=10.0.0",
+    "extract-msg>=0.50.0",
+    "fastapi>=0.110",
+    "uvicorn>=0.27",
+    "python-multipart>=0.0.9",
+    "httpx>=0.25",
     "reportlab>=4.0.0",
     "paddleocr>=2.7.0",
     "pypdfium2>=4.25.0",

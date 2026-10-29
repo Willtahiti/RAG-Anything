@@ -367,6 +367,7 @@ class Parser:
     OFFICE_FORMATS = {".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx"}
     IMAGE_FORMATS = {".png", ".jpeg", ".jpg", ".bmp", ".tiff", ".tif", ".gif", ".webp"}
     TEXT_FORMATS = {".txt", ".md"}
+    EMAIL_FORMATS = {".msg"}
 
     # Class-level logger
     logger = logging.getLogger(__name__)
@@ -1305,6 +1306,54 @@ class Parser:
             is_markdown=text_path.suffix.lower() == ".md",
             source_dir=text_path.parent,
         )
+
+    def parse_email(
+        self,
+        email_path: Union[str, Path],
+        output_dir: Optional[str] = None,
+        method: str = "auto",
+        lang: Optional[str] = None,
+        **kwargs,
+    ) -> List[Dict[str, Any]]:
+        """
+        Parse an Outlook ``.msg`` message and its attachments.
+
+        Headers and body become text blocks; each supported attachment
+        (PDF, Office, text, images) is parsed with this parser's own methods
+        and appended on its own page range. Requires ``extract-msg``
+        (``pip install raganything[email]``).
+        """
+        from .email_parser import parse_msg
+
+        email_path = Path(email_path)
+        base_dir = (
+            self._unique_output_dir(output_dir, email_path)
+            if output_dir
+            else email_path.parent / "email_output"
+        )
+
+        def handle_attachment(path: Path, out_dir: Path):
+            ext = path.suffix.lower()
+            out_dir.mkdir(parents=True, exist_ok=True)
+            if ext == ".pdf":
+                return self.parse_pdf(
+                    pdf_path=path,
+                    output_dir=str(out_dir),
+                    method=method,
+                    lang=lang,
+                    **kwargs,
+                )
+            if ext in self.OFFICE_FORMATS:
+                return self.parse_office_doc(
+                    doc_path=path, output_dir=str(out_dir), lang=lang, **kwargs
+                )
+            if ext in self.TEXT_FORMATS:
+                return self.parse_text_file(path, str(out_dir), lang)
+            if ext in self.EMAIL_FORMATS:
+                return parse_msg(path, out_dir, handle_attachment)
+            return None
+
+        return parse_msg(email_path, base_dir, handle_attachment)
 
     def parse_pdf(
         self,
@@ -2377,6 +2426,8 @@ class MineruParser(Parser):
             return self.parse_office_doc(file_path, output_dir, lang, **kwargs)
         elif ext in self.TEXT_FORMATS:
             return self.parse_text_file(file_path, output_dir, lang, **kwargs)
+        elif ext in self.EMAIL_FORMATS:
+            return self.parse_email(file_path, output_dir, method, lang, **kwargs)
         elif ext in HTML_FILE_EXTENSIONS:
             raise html_requires_docling_error(file_path)
         else:
@@ -2609,11 +2660,14 @@ class DoclingParser(Parser):
             elif ext in self.TEXT_FORMATS:
                 # Already text: read directly, as the other parsers do
                 return self.parse_text_file(file_path, output_dir, lang, **kwargs)
+            elif ext in self.EMAIL_FORMATS:
+                return self.parse_email(file_path, output_dir, method, lang, **kwargs)
             else:
                 raise ValueError(
                     f"Unsupported file format: {ext}. "
                     f"Docling only supports PDF files, Office formats ({', '.join(self.OFFICE_FORMATS)}), "
-                    f"HTML formats ({', '.join(self.HTML_FORMATS)}) "
+                    f"HTML formats ({', '.join(self.HTML_FORMATS)}), "
+                    f"email formats ({', '.join(self.EMAIL_FORMATS)}) "
                     f"and text formats ({', '.join(self.TEXT_FORMATS)})"
                 )
         finally:
@@ -3415,12 +3469,14 @@ class PaddleOCRParser(Parser):
             return self.parse_office_doc(file_path, output_dir, lang=lang, **kwargs)
         if ext in self.TEXT_FORMATS:
             return self.parse_text_file(file_path, output_dir, lang=lang, **kwargs)
+        if ext in self.EMAIL_FORMATS:
+            return self.parse_email(file_path, output_dir, lang=lang, **kwargs)
         if ext in HTML_FILE_EXTENSIONS:
             raise html_requires_docling_error(file_path)
 
         raise ValueError(
             f"Unsupported file format: {ext}. "
-            "PaddleOCR parser supports PDF, image, office, and text formats."
+            "PaddleOCR parser supports PDF, image, office, email (.msg), and text formats."
         )
 
     def check_installation(self) -> bool:

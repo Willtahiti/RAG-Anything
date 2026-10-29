@@ -15,6 +15,7 @@ from pathlib import Path
 
 from raganything.base import DocStatus
 from raganything.document_context import document_context
+from raganything.email_parser import EMAIL_FILE_EXTENSIONS
 from raganything.parser import (
     HTML_FILE_EXTENSIONS,
     MineruParser,
@@ -768,6 +769,25 @@ class ProcessorMixin:
                     output_dir=output_dir,
                     **kwargs,
                 )
+            elif ext in EMAIL_FILE_EXTENSIONS:
+                self.logger.info("Detected Outlook message, parsing mail and attachments...")
+                parse_email = getattr(doc_parser, "parse_email", None)
+                if parse_email is None:
+                    content_list = await asyncio.to_thread(
+                        doc_parser.parse_document,
+                        file_path=file_path,
+                        method=parse_method,
+                        output_dir=output_dir,
+                        **kwargs,
+                    )
+                else:
+                    content_list = await asyncio.to_thread(
+                        parse_email,
+                        email_path=file_path,
+                        output_dir=output_dir,
+                        method=parse_method,
+                        **kwargs,
+                    )
             elif ext in [
                 ".doc",
                 ".docx",
