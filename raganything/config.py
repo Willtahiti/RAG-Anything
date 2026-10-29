@@ -5,7 +5,7 @@ Contains configuration dataclasses with environment variable support
 """
 
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Optional
 from lightrag.utils import get_env_value
 
 
@@ -35,6 +35,26 @@ class RAGAnythingConfig:
     parser: str = field(default_factory=lambda: get_env_value("PARSER", "mineru", str))
     """Parser selection: 'mineru', 'docling', or 'paddleocr'."""
 
+    pdf_window_pages: int = field(
+        default_factory=lambda: get_env_value("PDF_WINDOW_PAGES", 200, int)
+    )
+    """Pages per window when a large PDF is parsed in windows (0 disables)."""
+
+    pdf_window_threshold: int = field(
+        default_factory=lambda: get_env_value("PDF_WINDOW_THRESHOLD", 400, int)
+    )
+    """PDFs with at most this many pages are parsed in one run."""
+
+    pdf_window_timeout: Optional[int] = field(
+        default_factory=lambda: get_env_value("PDF_WINDOW_TIMEOUT", None, int)
+    )
+    """Maximum seconds for one window (MinerU); None means no limit."""
+
+    pdf_resume: bool = field(
+        default_factory=lambda: get_env_value("PDF_RESUME", True, bool)
+    )
+    """Reuse the checkpoints of already-parsed windows when a parse is rerun."""
+
     display_content_stats: bool = field(
         default_factory=lambda: get_env_value("DISPLAY_CONTENT_STATS", True, bool)
     )
@@ -46,6 +66,23 @@ class RAGAnythingConfig:
         default_factory=lambda: get_env_value("ENABLE_IMAGE_PROCESSING", True, bool)
     )
     """Enable image content processing."""
+
+    enable_drawing_processing: bool = field(
+        default_factory=lambda: get_env_value("ENABLE_DRAWING_PROCESSING", True, bool)
+    )
+    """Detect technical-drawing pages in PDFs and describe them tile by tile
+    with the vision model (see ``raganything.drawing_pages``)."""
+
+    max_image_side: int = field(
+        default_factory=lambda: get_env_value("MAX_IMAGE_SIDE", 0, int)
+    )
+    """Downscale images whose longest side exceeds this many pixels before the
+    vision call (0 sends them unchanged). Useful with local vision models."""
+
+    min_image_pixels: int = field(
+        default_factory=lambda: get_env_value("MIN_IMAGE_PIXELS", 0, int)
+    )
+    """Skip extracted images with fewer pixels (logos, bullets); 0 keeps all."""
 
     enable_table_processing: bool = field(
         default_factory=lambda: get_env_value("ENABLE_TABLE_PROCESSING", True, bool)
@@ -81,7 +118,7 @@ class RAGAnythingConfig:
             x.strip()
             for x in get_env_value(
                 "SUPPORTED_FILE_EXTENSIONS",
-                ".pdf,.jpg,.jpeg,.png,.bmp,.tiff,.tif,.gif,.webp,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.md,.mp3,.wav,.flac,.m4a,.ogg,.wma,.aac,.opus,.mp4,.mov,.webm,.avi,.mkv,.flv,.wmv,.m4v",
+                ".pdf,.jpg,.jpeg,.png,.bmp,.tiff,.tif,.gif,.webp,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.md,.msg,.mp3,.wav,.flac,.m4a,.ogg,.wma,.aac,.opus,.mp4,.mov,.webm,.avi,.mkv,.flv,.wmv,.m4v",
                 str,
             ).split(",")
         ]

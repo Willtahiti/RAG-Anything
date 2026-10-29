@@ -67,8 +67,20 @@ extras_require = {
         "paddleocr>=2.7.0",
         "pypdfium2>=4.25.0",
     ],  # PaddleOCR parser for scanned PDFs
+    "email": ["extract-msg>=0.50.0"],  # Outlook .msg files
+    "app": [
+        "fastapi>=0.110",
+        "uvicorn>=0.27",
+        "python-multipart>=0.0.9",
+        "httpx>=0.25",
+    ],  # Web ingestion/search application
     "all": [
         "Pillow>=10.0.0",
+        "extract-msg>=0.50.0",
+        "fastapi>=0.110",
+        "uvicorn>=0.27",
+        "python-multipart>=0.0.9",
+        "httpx>=0.25",
         "reportlab>=4.0.0",
         "paddleocr>=2.7.0",
         "pypdfium2>=4.25.0",

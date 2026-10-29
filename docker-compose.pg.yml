@@ -1,0 +1,27 @@
+# PostgreSQL + pgvector for RAG-Anything (see docs/postgres_setup.md)
+#
+#   docker compose -f docker-compose.pg.yml up -d
+#
+# Set the same values in your environment / .env:
+#   POSTGRES_HOST=localhost POSTGRES_PORT=5432 POSTGRES_USER=rag
+#   POSTGRES_PASSWORD=<password> POSTGRES_DATABASE=rag
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-rag}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DATABASE:-rag}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - rag_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-rag} -d ${POSTGRES_DATABASE:-rag}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  rag_pgdata:

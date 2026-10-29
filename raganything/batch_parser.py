@@ -126,6 +126,7 @@ class BatchParser:
             self.parser.OFFICE_FORMATS
             | self.parser.IMAGE_FORMATS
             | self.parser.TEXT_FORMATS
+            | set(getattr(self.parser, "EMAIL_FORMATS", set()))
             | set(getattr(self.parser, "HTML_FORMATS", set()))
             | {".pdf"}
         )

@@ -367,6 +367,7 @@ class Parser:
     OFFICE_FORMATS = {".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx"}
     IMAGE_FORMATS = {".png", ".jpeg", ".jpg", ".bmp", ".tiff", ".tif", ".gif", ".webp"}
     TEXT_FORMATS = {".txt", ".md"}
+    EMAIL_FORMATS = {".msg"}
 
     # Class-level logger
     logger = logging.getLogger(__name__)
@@ -1306,6 +1307,134 @@ class Parser:
             source_dir=text_path.parent,
         )
 
+    # Parsers whose parse_pdf honours the window_* options (see pdf_windowing).
+    SUPPORTS_PDF_WINDOWING = False
+
+    def _maybe_parse_windowed(
+        self,
+        pdf_path: Path,
+        output_dir: Optional[str],
+        method: str,
+        lang: Optional[str],
+        kwargs: Dict[str, Any],
+    ) -> Optional[List[Dict[str, Any]]]:
+        """Parse a huge PDF window by window; None means "parse it whole".
+
+        Pops the ``window_*`` options (and the internal ``_in_window`` marker)
+        out of ``kwargs`` so they never reach the parser backend.
+        """
+        from .pdf_windowing import (
+            count_pdf_pages,
+            parse_pdf_in_windows,
+            window_settings,
+        )
+        from .parse_options import relevant_parser_kwargs
+
+        in_window = kwargs.pop("_in_window", False)
+        settings = window_settings(kwargs)
+        if in_window or settings["pages"] <= 0:
+            return None
+        try:
+            total = count_pdf_pages(pdf_path)
+        except Exception as exc:
+            self.logger.warning(
+                "Cannot count pages of %s (%s); parsing it whole", pdf_path, exc
+            )
+            return None
+        if total <= max(settings["threshold"], settings["pages"]):
+            return None
+
+        base_dir = (
+            self._unique_output_dir(output_dir, pdf_path)
+            if output_dir
+            else pdf_path.parent / f"{pdf_path.stem}_windows"
+        )
+        window_kwargs = dict(kwargs)
+        if settings["timeout"] is not None:
+            window_kwargs.setdefault("timeout", settings["timeout"])
+        self.logger.info(
+            f"Large PDF ({total} pages): parsing in windows of "
+            f"{settings['pages']} pages"
+        )
+
+        def parse_window(window_pdf: Path, out_dir: Path):
+            return self.parse_pdf(
+                pdf_path=window_pdf,
+                output_dir=str(out_dir),
+                method=method,
+                lang=lang,
+                _in_window=True,
+                **window_kwargs,
+            )
+
+        return parse_pdf_in_windows(
+            parse_window,
+            pdf_path,
+            base_dir,
+            window_pages=settings["pages"],
+            resume=settings["resume"],
+            retries=settings["retries"],
+            progress=settings["progress"],
+            total_pages=total,
+            fingerprint_extra={
+                "parser": type(self).__name__,
+                "method": method,
+                "lang": lang,
+                **relevant_parser_kwargs(kwargs),
+            },
+        )
+
+    def parse_email(
+        self,
+        email_path: Union[str, Path],
+        output_dir: Optional[str] = None,
+        method: str = "auto",
+        lang: Optional[str] = None,
+        **kwargs,
+    ) -> List[Dict[str, Any]]:
+        """
+        Parse an Outlook ``.msg`` message and its attachments.
+
+        Headers and body become text blocks; each supported attachment
+        (PDF, Office, text, images) is parsed with this parser's own methods
+        and appended on its own page range. Requires ``extract-msg``
+        (``pip install raganything[email]``).
+        """
+        from .email_parser import parse_msg
+
+        email_path = Path(email_path)
+        base_dir = (
+            self._unique_output_dir(output_dir, email_path)
+            if output_dir
+            else email_path.parent / "email_output"
+        )
+
+        def handle_attachment(path: Path, out_dir: Path):
+            ext = path.suffix.lower()
+            out_dir.mkdir(parents=True, exist_ok=True)
+            if ext == ".pdf":
+                from .drawing_pages import add_drawing_blocks
+
+                blocks = self.parse_pdf(
+                    pdf_path=path,
+                    output_dir=str(out_dir),
+                    method=method,
+                    lang=lang,
+                    **kwargs,
+                )
+                return add_drawing_blocks(blocks, path, out_dir)
+            if ext in self.OFFICE_FORMATS:
+                return self.parse_office_doc(
+                    doc_path=path, output_dir=str(out_dir), lang=lang, **kwargs
+                )
+            if ext in self.TEXT_FORMATS:
+                return self.parse_text_file(path, str(out_dir), lang)
+            if ext in self.EMAIL_FORMATS:
+                return parse_msg(path, out_dir, handle_attachment)
+            return None
+
+        return parse_msg(email_path, base_dir, handle_attachment)
+
     def parse_pdf(
         self,
         pdf_path: Union[str, Path],
@@ -1401,6 +1530,8 @@ class MineruParser(Parser):
 
     Note: Office documents are no longer directly supported. Please convert them to PDF first.
     """
+
+    SUPPORTS_PDF_WINDOWING = True
 
     __slots__ = ()
 
@@ -2094,6 +2225,12 @@ class MineruParser(Parser):
             if not pdf_path.exists():
                 raise FileNotFoundError(f"PDF file does not exist: {pdf_path}")
 
+            windowed = self._maybe_parse_windowed(
+                pdf_path, output_dir, method, lang, kwargs
+            )
+            if windowed is not None:
+                return windowed
+
             # Prepare output directory — use unique subdirectory to prevent
             # same-name file collisions when output_dir is shared (#51)
             if output_dir:
@@ -2377,6 +2514,8 @@ class MineruParser(Parser):
             return self.parse_office_doc(file_path, output_dir, lang, **kwargs)
         elif ext in self.TEXT_FORMATS:
             return self.parse_text_file(file_path, output_dir, lang, **kwargs)
+        elif ext in self.EMAIL_FORMATS:
+            return self.parse_email(file_path, output_dir, method, lang, **kwargs)
         elif ext in HTML_FILE_EXTENSIONS:
             raise html_requires_docling_error(file_path)
         else:
@@ -2492,6 +2631,8 @@ class DoclingParser(Parser):
     duplicating Docling model loads on first use.
     """
 
+    SUPPORTS_PDF_WINDOWING = True
+
     # Define Docling-specific formats
     HTML_FORMATS = set(HTML_FILE_EXTENSIONS)
 
@@ -2532,6 +2673,12 @@ class DoclingParser(Parser):
             pdf_path = Path(pdf_path)
             if not pdf_path.exists():
                 raise FileNotFoundError(f"PDF file does not exist: {pdf_path}")
+
+            windowed = self._maybe_parse_windowed(
+                pdf_path, output_dir, method, lang, kwargs
+            )
+            if windowed is not None:
+                return windowed
 
             name_without_suff = pdf_path.stem
 
@@ -2609,11 +2756,14 @@ class DoclingParser(Parser):
             elif ext in self.TEXT_FORMATS:
                 # Already text: read directly, as the other parsers do
                 return self.parse_text_file(file_path, output_dir, lang, **kwargs)
+            elif ext in self.EMAIL_FORMATS:
+                return self.parse_email(file_path, output_dir, method, lang, **kwargs)
             else:
                 raise ValueError(
                     f"Unsupported file format: {ext}. "
                     f"Docling only supports PDF files, Office formats ({', '.join(self.OFFICE_FORMATS)}), "
-                    f"HTML formats ({', '.join(self.HTML_FORMATS)}) "
+                    f"HTML formats ({', '.join(self.HTML_FORMATS)}), "
+                    f"email formats ({', '.join(self.EMAIL_FORMATS)}) "
                     f"and text formats ({', '.join(self.TEXT_FORMATS)})"
                 )
         finally:
@@ -3415,12 +3565,14 @@ class PaddleOCRParser(Parser):
             return self.parse_office_doc(file_path, output_dir, lang=lang, **kwargs)
         if ext in self.TEXT_FORMATS:
             return self.parse_text_file(file_path, output_dir, lang=lang, **kwargs)
+        if ext in self.EMAIL_FORMATS:
+            return self.parse_email(file_path, output_dir, lang=lang, **kwargs)
         if ext in HTML_FILE_EXTENSIONS:
             raise html_requires_docling_error(file_path)
 
         raise ValueError(
             f"Unsupported file format: {ext}. "
-            "PaddleOCR parser supports PDF, image, office, and text formats."
+            "PaddleOCR parser supports PDF, image, office, email (.msg), and text formats."
         )
 
     def check_installation(self) -> bool:

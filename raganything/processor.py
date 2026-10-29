@@ -15,6 +15,8 @@ from pathlib import Path
 
 from raganything.base import DocStatus
 from raganything.document_context import document_context
+from raganything.drawing_pages import DrawingConfig, add_drawing_blocks
+from raganything.email_parser import EMAIL_FILE_EXTENSIONS
 from raganything.parser import (
     HTML_FILE_EXTENSIONS,
     MineruParser,
@@ -699,13 +701,33 @@ class ProcessorMixin:
 
             if ext in [".pdf"]:
                 self.logger.info("Detected PDF file, using parser for PDF...")
+                pdf_kwargs = dict(kwargs)
+                if getattr(doc_parser, "SUPPORTS_PDF_WINDOWING", False):
+                    # Very large PDFs are parsed window by window (resumable)
+                    for option, config_name in (
+                        ("window_pages", "pdf_window_pages"),
+                        ("window_threshold", "pdf_window_threshold"),
+                        ("window_timeout", "pdf_window_timeout"),
+                        ("window_resume", "pdf_resume"),
+                    ):
+                        value = getattr(self.config, config_name, None)
+                        if value is not None:
+                            pdf_kwargs.setdefault(option, value)
                 content_list = await asyncio.to_thread(
                     doc_parser.parse_pdf,
                     pdf_path=file_path,
                     output_dir=output_dir,
                     method=parse_method,
-                    **kwargs,
+                    **pdf_kwargs,
                 )
+                if getattr(self.config, "enable_drawing_processing", False):
+                    content_list = await asyncio.to_thread(
+                        add_drawing_blocks,
+                        content_list,
+                        file_path,
+                        MineruParser._unique_output_dir(output_dir, file_path),
+                        DrawingConfig.from_env(enabled=True),
+                    )
             elif ext in AUDIO_FILE_EXTENSIONS or ext in VIDEO_FILE_EXTENSIONS:
                 # Media files need no document parser: they become a single
                 # audio/video content item and are handled by the modal
@@ -768,6 +790,27 @@ class ProcessorMixin:
                     output_dir=output_dir,
                     **kwargs,
                 )
+            elif ext in EMAIL_FILE_EXTENSIONS:
+                self.logger.info(
+                    "Detected Outlook message, parsing mail and attachments..."
+                )
+                parse_email = getattr(doc_parser, "parse_email", None)
+                if parse_email is None:
+                    content_list = await asyncio.to_thread(
+                        doc_parser.parse_document,
+                        file_path=file_path,
+                        method=parse_method,
+                        output_dir=output_dir,
+                        **kwargs,
+                    )
+                else:
+                    content_list = await asyncio.to_thread(
+                        parse_email,
+                        email_path=file_path,
+                        output_dir=output_dir,
+                        method=parse_method,
+                        **kwargs,
+                    )
             elif ext in [
                 ".doc",
                 ".docx",
@@ -864,6 +907,37 @@ class ProcessorMixin:
 
         return content_list, doc_id
 
+    def _drop_tiny_images(
+        self, multimodal_items: List[Dict[str, Any]]
+    ) -> List[Dict[str, Any]]:
+        """Skip decorative images below ``config.min_image_pixels``."""
+        min_pixels = getattr(getattr(self, "config", None), "min_image_pixels", 0) or 0
+        if min_pixels <= 0:
+            return multimodal_items
+        try:
+            from PIL import Image
+        except ImportError:
+            return multimodal_items
+
+        kept = []
+        skipped = 0
+        for item in multimodal_items:
+            path = item.get("img_path") if item.get("type") == "image" else None
+            if path and item.get("image_kind") != "technical_drawing":
+                try:
+                    with Image.open(path) as img:
+                        if img.width * img.height < min_pixels:
+                            skipped += 1
+                            continue
+                except Exception:
+                    pass  # unreadable here: let the image processor decide
+            kept.append(item)
+        if skipped:
+            self.logger.info(
+                f"Skipped {skipped} image(s) smaller than {min_pixels} pixels"
+            )
+        return kept
+
     async def _process_multimodal_content(
         self,
         multimodal_items: List[Dict[str, Any]],
@@ -891,6 +965,7 @@ class ProcessorMixin:
                 entities/relations need to be re-written into the new backend.
         """
 
+        multimodal_items = self._drop_tiny_images(multimodal_items)
         if not multimodal_items:
             self.logger.debug("No multimodal content to process")
             return
