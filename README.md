@@ -10,7 +10,7 @@
   <img src="https://img.shields.io/badge/python-3.10--3.13-4ecdc4?style=for-the-badge&logo=python&logoColor=white&labelColor=1a1a2e">
 </p>
 
-[Fork notice](#-fork-notice-and-attribution) · [What this fork adds](#-what-this-fork-adds) · [Quick start](#-quick-start) · [Documentation](docs/technical_docs.md) · [Original README](https://github.com/HKUDS/RAG-Anything#readme)
+[Fork notice](#-fork-notice-and-attribution) · [What this fork adds](#-what-this-fork-adds) · [Install](#-installation-and-first-run) · [Documentation](docs/technical_docs.md) · [Original README](https://github.com/HKUDS/RAG-Anything#readme)
 
 ---
 
@@ -46,6 +46,106 @@ New code lives in `raganything/email_parser.py`, `pdf_windowing.py`, `drawing_pa
 
 ---
 
+## 📦 Installation and first run
+
+### 1. Prerequisites
+
+| Need | Details |
+|---|---|
+| Python | 3.10 to 3.13 (MinerU 3.x does not support 3.14) |
+| Git | to clone this repository |
+| A model server | any OpenAI-compatible server for a **text/vision model** and an **embedding model**, e.g. [Ollama](https://ollama.com) or vLLM |
+| LibreOffice | only to ingest Word/Excel/PowerPoint files (and Office attachments of mails) |
+| PostgreSQL + pgvector | optional (recommended for large corpora): Docker, or `pg_dump`/`pg_restore` for snapshots |
+| GPU | optional but strongly advised for MinerU and the vision model on large PDFs |
+
+### 2. Install the fork (from source)
+
+```bash
+git clone https://github.com/Willtahiti/RAG-Anything.git
+cd RAG-Anything
+
+python3 -m venv .venv
+source .venv/bin/activate              # Windows: .venv\Scripts\activate
+
+# Mails (.msg), web/CLI interface and drawing rendering
+pip install -e ".[email,app,image]"
+```
+
+Other extras: `.[text]` (TXT/MD), `.[markdown]`, `.[paddleocr]`, `.[audio]`, `.[video]`, or `.[all]` for everything (large download). The first MinerU run downloads its models; see [docs/offline_setup.md](docs/offline_setup.md) for air-gapped machines.
+
+Check the parser: `mineru --version` (should print a 3.x version).
+
+> The PyPI package `raganything` is the **original** project and does not contain this fork's features: always install from this repository.
+
+### 3. Start the models (example with Ollama)
+
+```bash
+ollama pull qwen2.5vl:7b      # reads text and images, including plans
+ollama pull bge-m3            # embeddings, 1024 dimensions
+```
+
+### 4. Configure
+
+Create a `.env` file in the folder where you run the commands (it is loaded automatically), or export the variables:
+
+```bash
+RAG_LLM_BASE_URL=http://localhost:11434/v1
+RAG_LLM_MODEL=qwen2.5vl:7b
+RAG_EMBED_MODEL=bge-m3
+RAG_EMBED_DIM=1024
+# RAG_VISION_MODEL=...        # defaults to RAG_LLM_MODEL
+# RAG_API_KEY=...             # if your server requires a key
+
+WORKING_DIR=./rag_storage     # index and job state: keep it on persistent storage
+OUTPUT_DIR=./output           # parsed content and extracted images
+```
+
+Never change `RAG_EMBED_MODEL` or `RAG_EMBED_DIM` on an existing index: export, change, then import with `--reembed` (see [docs/technical_docs.md](docs/technical_docs.md)).
+
+**Optional: PostgreSQL + pgvector**
+
+```bash
+export POSTGRES_PASSWORD=choose-a-password
+docker compose -f docker-compose.pg.yml up -d
+```
+
+Then add to your configuration: `RAG_STORAGE=postgres`, `POSTGRES_HOST=localhost`, `POSTGRES_PORT=5432`, `POSTGRES_USER=rag`, `POSTGRES_PASSWORD=<same password>`, `POSTGRES_DATABASE=rag`. Details: [docs/postgres_setup.md](docs/postgres_setup.md).
+
+### 5. First run
+
+Web interface (listens on `127.0.0.1:8080`):
+
+```bash
+python -m raganything.app
+```
+
+Open <http://127.0.0.1:8080/ingest> to drop files in, then <http://127.0.0.1:8080/> to ask questions. Answers carry numbered sources that open the original at the cited page.
+
+Command line (same engine):
+
+```bash
+python -m raganything.cli ingest mail.msg manual.pdf some_folder/
+python -m raganything.cli query "Which cable section feeds the main switchboard?"
+python -m raganything.cli resume          # continue after an interruption
+python -m raganything.cli docs            # list indexed documents
+```
+
+### 6. Useful settings for large PDFs
+
+| Variable | Default | Meaning |
+|---|---|---|
+| `PDF_WINDOW_PAGES` | 200 | pages parsed per run, with a checkpoint after each |
+| `PDF_WINDOW_THRESHOLD` | 400 | PDFs up to this length are parsed in one go |
+| `PDF_WINDOW_TIMEOUT` | none | seconds allowed per window |
+| `ENABLE_DRAWING_PROCESSING` | true | render plan pages in tiles for the vision model |
+| `MAX_IMAGE_SIDE` | 0 (off) | downscale images sent to the vision model (e.g. 1792) |
+| `RAG_MAX_OUTAGE_S` | 3600 | how long to wait for a model server that went away |
+
+To expose the web interface beyond your machine, set `RAG_APP_HOST=0.0.0.0` **and** `RAG_APP_TOKEN=<secret>` (it refuses to start without a token on a non-local address).
+
+---
+
 ## 🌟 Overview
 
 This project turns a collection of mails and technical documents into a searchable knowledge base that answers in natural language and **shows where each statement comes from**.
@@ -75,9 +175,9 @@ It builds on the multimodal RAG framework published by the Data Intelligence Lab
   <img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" width="400">
 </div>
 
-### Installation
+### Installation (original project)
 
-> **Fork install:** the additions of this fork (`.msg`, windowed PDFs, drawings, PostgreSQL, export, web/CLI) are **not** in the PyPI package `raganything`, which is the original project. Install this repository from source (Option 2, using this repository's URL) with `pip install -e ".[all]"`. The sections below are inherited from the original documentation and still apply; the fork's own documentation is in [docs/technical_docs.md](docs/technical_docs.md).
+> **Inherited from the original documentation.** For this fork, follow [Installation and first run](#-installation-and-first-run) instead: the PyPI package `raganything` below is the original project and lacks this fork's features. The usage and configuration sections that follow still apply.
 
 
 > **Python version:** RAG-Anything supports Python 3.10 and later, but its default MinerU parser needs MinerU 3.x, which supports Python 3.10 to 3.13 only. On Python 3.14, RAG-Anything is installed without MinerU: use the Docling parser there (`pip install docling`, then `RAGAnythingConfig(parser="docling")`), or create the environment with Python 3.13 to use MinerU.
